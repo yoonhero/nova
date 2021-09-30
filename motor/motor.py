@@ -68,3 +68,16 @@ class Motor:
 
         except:
             print("Error on Stop Motor")
+
+
+if __name__ == "__main__":
+    motor = Motor()
+    motor.goForward()
+    while True:
+        mode = input(": ")
+        if mode == "f":
+            motor.goForward()
+        elif mode == "b":
+            motor.goBackward()
+        else:
+            motor.stop()
