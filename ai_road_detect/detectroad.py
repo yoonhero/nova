@@ -25,7 +25,7 @@ import cv2
 # def average_slope_intercept(img, lines):
 #     left_fit = []
 #     right_fit = []
-#     for line in lines: 
+#     for line in lines:
 #         x1,y1,x2,y2 = line.reshape(4)
 #         parameters = np.polyfit((x1, x2), (y1, y2), 1)
 #         slope = parameters[0]
@@ -130,6 +130,7 @@ def process(image):
 #     if cv2.waitKey(1) & 0xFF == ord('q'):
 #         break
 #     rawCapture.truncate(0)
+
 
 cap = cv2.VideoCapture(0)
 
