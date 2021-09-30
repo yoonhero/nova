@@ -16,7 +16,7 @@ class Motor:
         self.StepCount = 4
 
         self.Seq = [[0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [1, 0, 0, 0]]
-        self.backSeq = self.Seq.reverse()
+        self.backSeq = list(reversed(self.Seq))
 
     def goForward(self):
         try:
@@ -72,7 +72,6 @@ class Motor:
 
 if __name__ == "__main__":
     motor = Motor()
-    motor.goForward()
     while True:
         mode = input(": ")
         if mode == "f":
