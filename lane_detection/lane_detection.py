@@ -47,14 +47,18 @@ def average_slope_intercept(image, lines):
 
 # function: draw line
 def display_lines(image, lines):
-    line_image = np.zeros_like(image)
-    if lines is not None:
-        for x1, y1, x2, y2 in lines:
-            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
-    return line_image
-
+    try:
+        line_image = np.zeros_like(image)
+        if lines is not None:
+            for x1, y1, x2, y2 in lines:
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+        return line_image
+    except:
+        return image
 
 # function: set the interesting region
+
+
 def region_of_interest(image):
     height = image.shape[0]
     width = image.shape[1]
