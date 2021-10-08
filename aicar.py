@@ -9,7 +9,7 @@ import time
 obstacle_detect = obstacle.ObstacleDetect()
 lane_detect = lane_detection.Lane_Detection()
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture("./test/video.mp4")
 
 prevTime = 0
 while True:

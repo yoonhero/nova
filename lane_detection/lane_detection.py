@@ -2,9 +2,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 # function: preprocessing the image
-
-
 def canny(image):
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -20,9 +19,8 @@ def make_coordinate(image, line_parameters):
     x2 = int((y2-intercept)/slope)
     return np.array([x1, y1, x2, y2])
 
+
 # functino: get the average slope intercept (평균 기울기)
-
-
 def average_slope_intercept(image, lines):
     try:
         left_fit = []
@@ -51,7 +49,7 @@ def display_lines(image, lines):
         line_image = np.zeros_like(image)
         if lines is not None:
             for x1, y1, x2, y2 in lines:
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                cv2.line(line_image, (x1, y1), (x2, y2),  (0, 255, 0), 10)
         return line_image
     except:
         return image
@@ -65,10 +63,13 @@ def region_of_interest(image):
 
     # variable: need to crop polygon shape
     right_point = width // 10
-    left_point = width // 10 * 8
+    left_point = width // 10 * 9
+
+    w_point = width // 2
+    h_point = height // 2
 
     polygons = np.array(
-        [[(right_point, height), (left_point, height), (width//2, height//2)]])
+        [[(right_point, height), (left_point, height), (w_point, h_point)]])
     mask = np.zeros_like(image)
     cv2.fillPoly(mask, polygons, 255)
     masked_image = cv2.bitwise_and(image, mask)
