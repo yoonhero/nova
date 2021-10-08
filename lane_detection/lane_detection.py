@@ -20,26 +20,32 @@ def make_coordinate(image, line_parameters):
     x2 = int((y2-intercept)/slope)
     return np.array([x1, y1, x2, y2])
 
+# functino: get the average slope intercept (평균 기울기)
+
 
 def average_slope_intercept(image, lines):
-    left_fit = []
-    right_fit = []
-    for line in lines:
-        x1, y1, x2, y2 = line.reshape(4)
-        parameters = np.polyfit((x1, x2), (y1, y2), 1)
-        slope = parameters[0]
-        intercept = parameters[1]
-        if slope < 0:
-            left_fit.append((slope, intercept))
-        else:
-            right_fit.append((slope, intercept))
-    left_fit_average = np.average(left_fit, axis=0)
-    right_fit_average = np.average(right_fit, axis=0)
-    left_line = make_coordinate(image, left_fit_average)
-    right_line = make_coordinate(image, right_fit_average)
-    return np.array([left_line, right_line])
+    try:
+        left_fit = []
+        right_fit = []
+        for line in lines:
+            x1, y1, x2, y2 = line.reshape(4)
+            parameters = np.polyfit((x1, x2), (y1, y2), 1)
+            slope = parameters[0]
+            intercept = parameters[1]
+            if slope < 0:
+                left_fit.append((slope, intercept))
+            else:
+                right_fit.append((slope, intercept))
+        left_fit_average = np.average(left_fit, axis=0)
+        right_fit_average = np.average(right_fit, axis=0)
+        left_line = make_coordinate(image, left_fit_average)
+        right_line = make_coordinate(image, right_fit_average)
+        return np.array([left_line, right_line])
+    except:
+        return np.array([])
 
 
+# function: draw line
 def display_lines(image, lines):
     line_image = np.zeros_like(image)
     if lines is not None:
@@ -47,14 +53,16 @@ def display_lines(image, lines):
             cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
     return line_image
 
+
 # function: set the interesting region
-
-
 def region_of_interest(image):
     height = image.shape[0]
     width = image.shape[1]
+
+    # variable: need to crop polygon shape
     right_point = width // 10
     left_point = width // 10 * 8
+
     polygons = np.array(
         [[(right_point, height), (left_point, height), (width//2, height//2)]])
     mask = np.zeros_like(image)
@@ -63,16 +71,28 @@ def region_of_interest(image):
     return masked_image
 
 
+# class: lane detection
 class Lane_Detection():
     def detect(self, image):
         lane_image = np.copy(image)
         canny_img = canny(lane_image)
         cropped_image = region_of_interest(canny_img)
+
+        # cv2.HoughLinesP(image, rho, theta, threshold, minLineLength, maxLineGap) → lines
+        # image – 8bit, single-channel binary image, canny edge를 선 적용.
+        # rho – r 값의 범위 (0 ~ 1 실수)
+        # theta – 𝜃 값의 범위(0 ~ 180 정수)
+        # threshold – 만나는 점의 기준, 숫자가 작으면 많은 선이 검출되지만 정확도가 떨어지고, 숫자가 크면 정확도가 올라감.
+        # minLineLength – 선의 최소 길이. 이 값보다 작으면 reject.
+        # maxLineGap – 선과 선사이의 최대 허용간격. 이 값보다 작으며 reject.
         lines = cv2.HoughLinesP(cropped_image, 2, np.pi / 180,
                                 100, np.array([]), minLineLength=40, maxLineGap=5)
 
         average_image = average_slope_intercept(lane_image, lines)
+
         line_image = display_lines(lane_image, average_image)
+
+        # combine the originial image and line_image
         combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
         return combo_image
 
