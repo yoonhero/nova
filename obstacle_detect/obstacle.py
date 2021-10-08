@@ -97,7 +97,7 @@ if __name__ == "__main__":
         stop = obstacle_detect.recognize(frame)
 
         if stop:
-            print("stop!! ")
+            print("stop!!")
 
     cap.release()
     cv2.destroyAllWindows()
