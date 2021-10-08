@@ -2,6 +2,15 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+# function: preprocessing the image
+
+
+def canny(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    canny = cv2.Canny(blur, 50, 150)
+    return canny
+
 
 def make_coordinate(image, line_parameters):
     slope, intercept = line_parameters
@@ -31,19 +40,14 @@ def average_slope_intercept(image, lines):
     return np.array([left_line, right_line])
 
 
-def canny(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    canny = cv2.Canny(blur, 50, 150)
-    return canny
-
-
 def display_lines(image, lines):
     line_image = np.zeros_like(image)
     if lines is not None:
         for x1, y1, x2, y2 in lines:
             cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
     return line_image
+
+# function: set the interesting region
 
 
 def region_of_interest(image):
@@ -59,23 +63,25 @@ def region_of_interest(image):
     return masked_image
 
 
-image = cv2.imread("road_sample.jpg")
-lane_image = np.copy(image)
+class Lane_Detection():
+    def detect(self, image):
+        lane_image = np.copy(image)
+        canny_img = canny(lane_image)
+        cropped_image = region_of_interest(canny_img)
+        lines = cv2.HoughLinesP(cropped_image, 2, np.pi / 180,
+                                100, np.array([]), minLineLength=40, maxLineGap=5)
+
+        average_image = average_slope_intercept(lane_image, lines)
+        line_image = display_lines(lane_image, average_image)
+        combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
+        return combo_image
 
 
-canny = canny(lane_image)
+if __name__ == '__main__':
+    image = cv2.imread('road_sample.jpg')
 
-cropped_image = region_of_interest(canny)
+    lane_detection = Lane_Detection()
+    result = lane_detection.detect(image)
 
-lines = cv2.HoughLinesP(cropped_image, 2, np.pi / 180,
-                        100, np.array([]), minLineLength=40, maxLineGap=5)
-
-average_image = average_slope_intercept(lane_image, lines)
-line_image = display_lines(lane_image, average_image)
-combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
-
-cv2.imshow("canny image", canny)
-cv2.imshow("cropped iamge", cropped_image)
-cv2.imshow("result", combo_image)
-
-cv2.waitKey(0)
+    cv2.imshow("result", result)
+    cv2.waitKey(0)
