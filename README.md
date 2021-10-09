@@ -28,7 +28,7 @@
 
 # HardWare Stack
 
-![image](https://cdn.imweb.me/thumbnail/20201029/d0ea78a892e73.gif)
+<img src="https://cdn.imweb.me/thumbnail/20201029/d0ea78a892e73.gif" />
 
 언젠가 이렇게 될거...
 

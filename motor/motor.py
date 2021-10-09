@@ -15,13 +15,21 @@ class Motor:
 
         self.StepCount = 4
 
-        self.Seq = [[0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [1, 0, 0, 0]]
+        self.Seq = [[0, 1, 0, 0],
+                    [0, 1, 0, 1],
+                    [0, 0, 0, 1],
+                    [1, 0, 0, 1],
+                    [1, 0, 0, 0],
+                    [1, 0, 1, 0],
+                    [0, 0, 1, 0],
+                    [0, 1, 1, 0]]
         self.backSeq = list(reversed(self.Seq))
 
     def goForward(self):
         try:
             while True:
                 for pin in range(0, 4):
+
                     xpin = self.StepPins[pin]
                     if self.Seq[self.StepCounter][pin] != 0:
                         GPIO.output(xpin, True)
