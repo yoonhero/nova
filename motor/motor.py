@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 
 class Motor:
     def __init__(self):
+        GPIO.cleanup()
         GPIO.setmode(GPIO.BCM)
         self.StepPins = [12, 16, 20, 21]
 
@@ -15,14 +16,7 @@ class Motor:
 
         self.StepCount = 4
 
-        self.Seq = [[0, 1, 0, 0],
-                    [0, 1, 0, 1],
-                    [0, 0, 0, 1],
-                    [1, 0, 0, 1],
-                    [1, 0, 0, 0],
-                    [1, 0, 1, 0],
-                    [0, 0, 1, 0],
-                    [0, 1, 1, 0]]
+        self.Seq = [[0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [1, 0, 0, 0]]
         self.backSeq = list(reversed(self.Seq))
 
     def goForward(self):
@@ -88,3 +82,5 @@ if __name__ == "__main__":
             motor.goBackward()
         else:
             motor.stop()
+
+    GPIO.cleanup()
