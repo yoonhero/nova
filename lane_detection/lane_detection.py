@@ -62,11 +62,11 @@ def region_of_interest(image):
     mask = np.zeros_like(image)
 
     # variable: need to crop polygon shape
-    right_point = 150
-    left_point = width - 150
+    right_point = width / 10
+    left_point = width - right_point
 
     w_point = width // 2
-    h_point = height - 350
+    h_point = height - (height / 3 * 2)
 
     # polygons = np.array(
     #     [[(right_point, height), (left_point, height), (w_point, h_point)]])

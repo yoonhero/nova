@@ -132,7 +132,7 @@ def process(image):
 #     rawCapture.truncate(0)
 
 
-cap = cv2.VideoCapture("../test/lane_detection_2.mp4")
+cap = cv2.VideoCapture("../test/lane_detection_3.mp4")
 
 while cap.isOpened():
     ret, frame = cap.read()
