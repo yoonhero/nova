@@ -1,9 +1,17 @@
 import time
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as gpio
+    test_environment = False
+except (ImportError, RuntimeError):
+    test_environment = True
 
 
 class Motor:
-    def __init__(self):
+    def __init__(self, test_environment):
+        if test_environment:
+            self.test_environment = True
+            return
+
         GPIO.cleanup()
         GPIO.setmode(GPIO.BCM)
         self.StepPins = [12, 16, 20, 21]
@@ -20,6 +28,8 @@ class Motor:
         self.backSeq = list(reversed(self.Seq))
 
     def goForward(self):
+        if self.test_environment:
+            return
         try:
             while True:
                 for pin in range(0, 4):
@@ -42,6 +52,8 @@ class Motor:
             print("Error on Control Motor!!")
 
     def goBackward(self):
+        if self.test_environment:
+            return
         try:
             while True:
                 for pin in range(0, 4):
@@ -63,6 +75,8 @@ class Motor:
             print("Error on Control Motor!!")
 
     def stop(self):
+        if self.test_environment:
+            return
         try:
             for pin in range(0, 4):
                 xpin = self.StepPins[pin]
@@ -73,7 +87,7 @@ class Motor:
 
 
 if __name__ == "__main__":
-    motor = Motor()
+    motor = Motor(test_environment=test_environment)
     while True:
         mode = input(": ")
         if mode == "f":

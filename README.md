@@ -22,7 +22,7 @@
 
 ### 이 프로젝트를 진행하기 위해서 배울것
 
-- [ ] opencv python
+- [x] opencv python
 - [x] deeplearning keras
 - [x] math
 

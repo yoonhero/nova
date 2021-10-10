@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-
+from motor import motor
 
 # function: preprocessing the image
+
+
 def canny(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -50,6 +52,7 @@ def display_lines(image, lines):
         if lines is not None:
             for x1, y1, x2, y2 in lines:
                 cv2.line(line_image, (x1, y1), (x2, y2),  (0, 255, 0), 10)
+
         return line_image
     except:
         return image
@@ -80,8 +83,35 @@ def region_of_interest(image):
     return masked_image
 
 
+# class: Auto Drive System
+class Steering_System():
+    def __init__(self):
+        try:
+            self.Motor = motor.Motor()
+            print("Success!! Setting motor drive!!")
+        except:
+            print("Failed to setting motor driver ...")
+
+    def predict(self, image, lines):
+        try:
+            line_image = np.zeros_like(image)
+            if lines is not None:
+                for x1, y1, x2, y2 in lines:
+                    horizontal_center = int((x1 + x2)/2)
+                    vertical_center = int((y1 + y2)/2)
+                    cv2.circle(
+                        line_image, (horizontal_center, vertical_center), 10, (0, 0, 255), -1)
+            return line_image
+        except:
+            return
+
 # class: lane detection
+
+
 class Lane_Detection():
+    def __init__(self):
+        self.automatic_drive = Steering_System()
+
     def detect(self, image, advance_view=False):
         # plt.imshow(image)
         # plt.show()
@@ -104,6 +134,8 @@ class Lane_Detection():
 
         line_image = display_lines(lane_image, average_image)
 
+        predict_image = self.automatic_drive.predict(lane_image, average_image)
+
         if advance_view:
             cv2.imshow("original", image)
             cv2.imshow('cropped_image', cropped_image)
@@ -111,6 +143,7 @@ class Lane_Detection():
 
         # combine the originial image and line_image
         combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
+        combo_image = cv2.addWeighted(combo_image, 0.8, predict_image, 1, 1)
         return combo_image
 
 

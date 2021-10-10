@@ -22,7 +22,7 @@ while True:
 
     h, w, c = frame.shape
     if ret:
-        image_with_lines = lane_detect.detect(frame, True)
+        image_with_lines = lane_detect.detect(frame, advance_view=False)
         fps = 1/(sec)
         fps_text = "FPS : %0.1f" % fps
         cv2.putText(image_with_lines, fps_text, (0, 100),
