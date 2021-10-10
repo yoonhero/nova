@@ -8,6 +8,11 @@ from motor import motor
 blue = (255, 0, 0)
 green = (0, 255, 0)
 red = (0, 0, 255)
+yellow = (255, 204, 0)
+light_blue = (0, 199, 255)
+orange = (255, 174, 0)
+grey = (127, 127, 127)
+dark_green = (0, 191, 0)
 
 
 # function: preprocessing the image
