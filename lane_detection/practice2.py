@@ -1,6 +1,6 @@
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import RPi.GPIO as GPIO
+# from picamera.array import PiRGBArray
+# from picamera import PiCamera
+# import RPi.GPIO as GPIO
 from time import sleep
 import numpy as np
 import cv2
@@ -115,8 +115,8 @@ def process(image):
         canny_image,
         np.array([region_of_interest_vertices], np.int32),
     )
-    lines = cv2.HoughLinesP(cropped_image,
-                            rho=6, theta=np.pi/60, threshold=160, lines=np.array([]), minLineLength=40, maxLineGap=25)
+    lines = cv2.HoughLinesP(cropped_image, 2, np.pi / 180,
+                            100, np.array([]), minLineLength=40, maxLineGap=5)
     image_with_lines = draw_the_lines(image, lines)
 
     return image_with_lines
@@ -132,15 +132,15 @@ def process(image):
 #     rawCapture.truncate(0)
 
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("../test/video.mp4")
 
 while cap.isOpened():
     ret, frame = cap.read()
     frame = process(frame)
-    cv2.imshow(frame)
+    cv2.imshow("frame", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 cap.release()
-camera.stop_preview()
+# camera.stop_preview()
 cv2.destroyAllWindows()
-camera.close()
+# camera.close()

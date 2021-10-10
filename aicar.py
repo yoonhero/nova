@@ -22,12 +22,12 @@ while True:
 
     h, w, c = frame.shape
     if ret:
-        image_with_lines = lane_detect.detect(frame)
+        image_with_lines = lane_detect.detect(frame, True)
         fps = 1/(sec)
         fps_text = "FPS : %0.1f" % fps
         cv2.putText(image_with_lines, fps_text, (0, 100),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0))
-        cv2.imshow('frame', image_with_lines)
+        cv2.imshow('result', image_with_lines)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     else:

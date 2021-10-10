@@ -54,16 +54,15 @@ def display_lines(image, lines):
     except:
         return image
 
+
 # function: set the interesting region
-
-
 def region_of_interest(image):
     height = image.shape[0]
     width = image.shape[1]
 
     # variable: need to crop polygon shape
-    right_point = width // 10
-    left_point = width // 10 * 9
+    right_point = width // 8
+    left_point = width // 8 * 7
 
     w_point = width // 2
     h_point = height // 2
@@ -78,7 +77,7 @@ def region_of_interest(image):
 
 # class: lane detection
 class Lane_Detection():
-    def detect(self, image):
+    def detect(self, image, advance_view=False):
         lane_image = np.copy(image)
         canny_img = canny(lane_image)
         cropped_image = region_of_interest(canny_img)
@@ -96,6 +95,11 @@ class Lane_Detection():
         average_image = average_slope_intercept(lane_image, lines)
 
         line_image = display_lines(lane_image, average_image)
+
+        if advance_view:
+            cv2.imshow("original", image)
+            cv2.imshow('cropped_image', cropped_image)
+            cv2.imshow('average_image', line_image)
 
         # combine the originial image and line_image
         combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
