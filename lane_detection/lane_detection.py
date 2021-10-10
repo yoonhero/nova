@@ -3,9 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from motor import motor
 
+
+# BGR opencv color map (Blue, Green, Red)
+blue = (255, 0, 0)
+green = (0, 255, 0)
+red = (0, 0, 255)
+
+
 # function: preprocessing the image
-
-
 def canny(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
