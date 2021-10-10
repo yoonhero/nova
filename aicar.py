@@ -9,7 +9,7 @@ import time
 obstacle_detect = obstacle.ObstacleDetect()
 lane_detect = lane_detection.Lane_Detection()
 
-cap = cv2.VideoCapture("./test/video.mp4")
+cap = cv2.VideoCapture("./test/lane_detection_3.mp4")
 
 prevTime = 0
 while True:
@@ -26,7 +26,7 @@ while True:
         fps = 1/(sec)
         fps_text = "FPS : %0.1f" % fps
         cv2.putText(image_with_lines, fps_text, (0, 100),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0))
+                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 5)
         cv2.imshow('result', image_with_lines)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

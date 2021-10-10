@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # function: preprocessing the image
 def canny(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
     canny = cv2.Canny(blur, 50, 150)
     return canny
@@ -59,17 +59,22 @@ def display_lines(image, lines):
 def region_of_interest(image):
     height = image.shape[0]
     width = image.shape[1]
+    mask = np.zeros_like(image)
 
     # variable: need to crop polygon shape
-    right_point = width // 8
-    left_point = width // 8 * 7
+    right_point = 150
+    left_point = width - 150
 
     w_point = width // 2
-    h_point = height // 2
+    h_point = height - 350
 
-    polygons = np.array(
-        [[(right_point, height), (left_point, height), (w_point, h_point)]])
-    mask = np.zeros_like(image)
+    # polygons = np.array(
+    #     [[(right_point, height), (left_point, height), (w_point, h_point)]])
+    polygons = np.array([[
+        (right_point, height),
+        (w_point, h_point),
+        (left_point, height), ]], np.int32)
+
     cv2.fillPoly(mask, polygons, 255)
     masked_image = cv2.bitwise_and(image, mask)
     return masked_image
@@ -78,6 +83,9 @@ def region_of_interest(image):
 # class: lane detection
 class Lane_Detection():
     def detect(self, image, advance_view=False):
+        # plt.imshow(image)
+        # plt.show()
+
         lane_image = np.copy(image)
         canny_img = canny(lane_image)
         cropped_image = region_of_interest(canny_img)
@@ -89,8 +97,8 @@ class Lane_Detection():
         # threshold – 만나는 점의 기준, 숫자가 작으면 많은 선이 검출되지만 정확도가 떨어지고, 숫자가 크면 정확도가 올라감.
         # minLineLength – 선의 최소 길이. 이 값보다 작으면 reject.
         # maxLineGap – 선과 선사이의 최대 허용간격. 이 값보다 작으며 reject.
-        lines = cv2.HoughLinesP(cropped_image, 2, np.pi / 180,
-                                100, np.array([]), minLineLength=40, maxLineGap=5)
+        lines = cv2.HoughLinesP(cropped_image, 2, np.pi/180, 100,
+                                np.array([]), minLineLength=40, maxLineGap=5)
 
         average_image = average_slope_intercept(lane_image, lines)
 
