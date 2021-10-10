@@ -93,6 +93,12 @@ def region_of_interest(image):
     return masked_image
 
 
+def draw_center_line(image, coordinate):
+    ho = coordinate[0]
+    ve = coordinate[1]
+    # cv2.line(image, ())
+
+
 # class: Auto Drive System
 class Steering_System():
     def __init__(self):
@@ -104,13 +110,23 @@ class Steering_System():
 
     def predict(self, image, lines):
         try:
+            height = image.shape[0]
+            width = image.shape[1]
+            gap = int(height / 30)
             line_image = np.zeros_like(image)
+
+            ho = []
+            ve = []
+
             if lines is not None:
                 for x1, y1, x2, y2 in lines:
                     horizontal_center = int((x1 + x2)/2)
                     vertical_center = int((y1 + y2)/2)
-                    cv2.circle(
-                        line_image, (horizontal_center, vertical_center), 10, (0, 0, 255), -1)
+                    ho.append(horizontal_center)
+                    ve.append(vertical_center)
+                    cv2.line(
+                        line_image, (horizontal_center, vertical_center+gap), (horizontal_center, vertical_center-gap), dark_green, 8)
+            draw_center_line(line_image, (ho, ve))
             return line_image
         except:
             return
