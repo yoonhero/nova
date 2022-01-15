@@ -69,8 +69,46 @@ Youtube 및 여러 사이트를 참고해서 OpenCV 로 도로의 선을 추출�
 
 ![image](https://i.ytimg.com/vi/G2VaJvNNp4k/hqdefault.jpg)
 
+## Live Streaming
+
+비디오를 클라이언트측에서 클라우드 서로 전송하여서 이를 처리한후 클라우드에서 자율주행차에 명령을 내리는 구조.
+
+### Socket IO
+
+```
+pip3 install python-socketio
+```
+
+<strong>Basic Server Setting</strong>
+
+```python
+import socketio
+
+# create a Socket.IO server
+sio = socketio.Server()
+
+# wrap with a WSGI application
+app = socketio.WSGIApp(sio)
+```
+
+<strong>Event</strong>
+
+```python
+@sio.on('my custom event')
+def another_event(sid, data):
+    pass
+```
+
+<strong>WSGI</strong>(Web Server Gateway Interface)
+
+Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보를 Application 에 전달한다.
+
+- HTTP Request 에 대한 정보(Method, URL, Data, ...)
+- Callback 함수
+
 ## To be Later
 
+- [ ] Live Streaming
 - [ ] Motor Right/Left Turn
 - [ ] Lane Detection Algorithm to turn right or left
 - [ ] OpenCV Speed Up

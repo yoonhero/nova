@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from motor import motor
-
+from obstacle_detect import obstacle
 
 # BGR opencv color map (Blue, Green, Red)
 blue = (255, 0, 0)
@@ -103,6 +103,7 @@ def draw_center_line(image, coordinate):
 class Steering_System():
     def __init__(self):
         try:
+            self.obstacle_detect = obstacle.ObstacleDetect()
             self.Motor = motor.Motor()
             print("Success!! Setting motor drive!!")
         except:
@@ -127,6 +128,9 @@ class Steering_System():
                     cv2.line(
                         line_image, (horizontal_center, vertical_center+gap), (horizontal_center, vertical_center-gap), dark_green, 8)
             draw_center_line(line_image, (ho, ve))
+            stop = self.obstacle_detect.recognize(line_image)
+            # cv2.putText(line_image, stop, (0, 0),
+            #             cv2.FONT_HERSHEY_SIMPLEX, 2, red, 5)
             return line_image
         except:
             return
@@ -169,8 +173,11 @@ class Lane_Detection():
 
         # combine the originial image and line_image
         combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
-        combo_image = cv2.addWeighted(combo_image, 0.8, predict_image, 1, 1)
-        return combo_image
+        try:
+            combo_image = cv2.addWeighted(
+                combo_image, 0.8, predict_image, 1, 1)
+        except:
+            return combo_image
 
 
 if __name__ == '__main__':

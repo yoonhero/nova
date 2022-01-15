@@ -6,23 +6,23 @@ from obstacle_detect import obstacle
 from lane_detection import lane_detection
 import time
 
-obstacle_detect = obstacle.ObstacleDetect()
+# obstacle_detect = obstacle.ObstacleDetect()
 lane_detect = lane_detection.Lane_Detection()
 
-cap = cv2.VideoCapture("./test/lane_detection_1.mp4")
-
+cap = cv2.VideoCapture(1)
+# cap.set(cv2.CAP_PROP_FPS, 10)
 prevTime = 0
 while True:
     # 웹캠 프레임
 
     ret, frame = cap.read()
-    curTime = time.time()
-    sec = curTime - prevTime
-    prevTime = curTime
 
     h, w, c = frame.shape
     if ret:
         image_with_lines = lane_detect.detect(frame, advance_view=False)
+        curTime = time.time()
+        sec = curTime - prevTime
+        prevTime = curTime
         fps = 1/(sec)
         fps_text = "FPS : %0.1f" % fps
         cv2.putText(image_with_lines, fps_text, (0, 100),
