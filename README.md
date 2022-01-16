@@ -9,6 +9,8 @@
 - [초기 완성 자동차 영상](https://www.youtube.com/watch?v=kk2jRKFPXv0)
 - [언젠가는 완성 ...]()
 
+![image](https://github.com/yoonhero/OurAICar/blob/master/docs/software_structure.jpg?raw=true)
+
 현재 언론이나 뉴스같은 곳에서도 많이 접할 수 있는 자율주행차를 직접 만들어보고 싶었고 직접 만들기 위해서 친구와 이 프로젝트를 시작하게 되었습니다. 이 프로젝트는 아마도 10월달쯤에 끝날 예정이며 세상을 바꾸기 위한 작은 발걸음이 될 것이라고 생각하고 열심히 노력하고 있습니다.
 
 ## Tech Stack
@@ -71,7 +73,9 @@ Youtube 및 여러 사이트를 참고해서 OpenCV 로 도로의 선을 추출�
 
 ## Live Streaming
 
-비디오를 클라이언트측에서 클라우드 서로 전송하여서 이를 처리한후 클라우드에서 자율주행차에 명령을 내리는 구조.
+![image](https://github.com/yoonhero/OurAICar/blob/master/docs/liveStreaming.jpg?raw=true)
+
+비디오를 클라이언트측에서 클라우드 서로 전송하여서 이를 처리한후 클라우드에서 자율주행차에 명령을 내리는 구조로 제작하였습니다.
 
 ### Socket IO
 
