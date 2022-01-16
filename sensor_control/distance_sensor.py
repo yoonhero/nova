@@ -4,7 +4,6 @@ import time
 
 class DistanceSensor():
     def __init__(self):
-        GPIO.cleanup()
         # GPIO Mode (BOARD / BCM)
         GPIO.setmode(GPIO.BCM)
 
