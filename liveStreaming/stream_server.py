@@ -3,6 +3,7 @@ import socket
 import struct
 from PIL import Image
 import matplotlib.pyplot as pl
+from obstacle_detect import ObstacleDetect
 
 server_socket = socket.socket()
 
@@ -11,6 +12,10 @@ portNum = 8000
 
 server_socket.bind((ipAddress, portNum))
 server_socket.listen(0)
+
+# Object Detection Module
+obstacle_detect = ObstacleDetect()
+
 
 # Accept a single connection and make a file-like object out of it
 connection = server_socket.accept()[0].makefile('rb')
@@ -35,6 +40,8 @@ try:
         image = Image.open(image_stream)
 
         ################################################################ WILL PROCESS IMAGE #################################################################
+
+        stop = obstacle_detect.recognize(image)
 
         if img is None:
             img = pl.imshow(image)

@@ -11,7 +11,7 @@
 
 ![image](https://github.com/yoonhero/OurAICar/blob/master/docs/software_structure.jpg?raw=true)
 
-현재 언론이나 뉴스같은 곳에서도 많이 접할 수 있는 자율주행차를 직접 만들어보고 싶었고 직접 만들기 위해서 친구와 이 프로젝트를 시작하게 되었습니다. 이 프로젝트는 아마도 10월달쯤에 끝날 예정이며 세상을 바꾸기 위한 작은 발걸음이 될 것이라고 생각하고 열심히 노력하고 있습니다.
+현재 언론이나 뉴스같은 곳에서도 많이 접할 수 있는 자율주행차를 직접 만들어보고 싶었고 직접 만들기 위해서 친구와 이 프로젝트를 시작하게 되었습니다. 이 프로젝트는 아마도 10월달쯤에 끝날 예정이였지만 생각보다 길어진 작업 기간으로 인해서 완성이 지체되고 있지만 겨울방학 안에 꼭 완성하여서 공개할 예정입니다. 이 과정이 세상을 바꾸기 위한 작은 발걸음이 될 것이라고 생각하고 열심히 노력하고 있습니다.
 
 ## Tech Stack
 
@@ -112,12 +112,11 @@ Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보�
 
 ## To be Later
 
-- [ ] Live Streaming
+- [x] Live Streaming
 - [ ] Motor Right/Left Turn
 - [ ] Lane Detection Algorithm to turn right or left
 - [ ] OpenCV Speed Up
 - [ ] Object Detection Fastly
-- [ ] Live Streaming
-- [ ] Connect with Hardware
+- [x] Connect with Hardware
 - [ ] Test And Edit Values
 - [ ] Publishing
