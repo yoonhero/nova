@@ -74,9 +74,8 @@ class ObstacleDetect:
 
                 except:
                     pass
-        cv2.imshow("YOLOv2", frame)
 
-        return self.stop
+        return frame, self.stop
 
 
 if __name__ == "__main__":
