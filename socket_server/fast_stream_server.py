@@ -70,3 +70,10 @@ class Server(object):
         sensor_thread.start()
 
         self.video_stream(self.host, self.port1)
+
+
+if __name__ == "__main__":
+    h, p1, p2 = "172.30.1.34", 8000, 8002
+
+    ts = Server(h, p1, p2)
+    ts.start()
