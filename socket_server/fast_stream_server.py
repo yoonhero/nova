@@ -9,15 +9,17 @@ sensor_data = None
 
 # Distance Data from Arduino Sensor
 class SensorDataHandler(socketserver.BaseRequestHandler):
-    data = ""
+
+    data = " "
 
     def handle(self):
         global sensor_data
         while self.data:
             self.data = self.request.recv(1024)
             sensor_data = round(float(self.data), 1)
+            print("[SOCKET] SENSOR DATA RECEIVED")
+            # client Address: self.client_address[0]))
 
-            print(sensor_data)
 
 class VideoStreamHandler(socketserver.StreamRequestHandler):
     def handle(self):
@@ -32,8 +34,10 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
                 if first != -1 and last != -1:
                     jpg = stream_bytes[first:last + 2]
                     stream_bytes = stream_bytes[last + 2:]
-                    gray = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
-                    image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
+                    gray = cv2.imdecode(np.frombuffer(
+                        jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+                    image = cv2.imdecode(np.frombuffer(
+                        jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
 
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
@@ -49,6 +53,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
             cv2.destroyAllWindows()
             sys.exit()
 
+
 class Server(object):
     def __init__(self, host, port1, port2):
         self.host = host
@@ -57,11 +62,11 @@ class Server(object):
 
     def video_stream(self, host, port):
         s = socketserver.TCPServer((host, port), VideoStreamHandler)
-        s.server_forever()
+        s.serve_forever()
 
     def sensor_stream(self, host, port):
         s = socketserver.TCPServer((host, port), SensorDataHandler)
-        s.server_forever()
+        s.serve_forever()
 
     def start(self):
         sensor_thread = threading.Thread(
