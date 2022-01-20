@@ -57,7 +57,7 @@ try:
 
         curTime = time.time()
 
-        ################################################################ WILL PROCESS IMAGE #################################################################
+        # process the image
         convertedImg = image.convert("RGB")
         open_cv_image = np.array(convertedImg)
         # Convert RGB to BGR
