@@ -4,6 +4,7 @@ import threading
 import sys
 import numpy as np
 
+# get distance data
 sensor_data = None
 
 
@@ -15,10 +16,13 @@ class SensorDataHandler(socketserver.BaseRequestHandler):
     def handle(self):
         global sensor_data
         while self.data:
-            self.data = self.request.recv(1024)
-            sensor_data = round(float(self.data), 1)
-            print("[SOCKET] SENSOR DATA RECEIVED")
-            # client Address: self.client_address[0]))
+            try:
+                self.data = self.request.recv(1024)
+                sensor_data = round(float(self.data), 1)
+                print("[SOCKET] SENSOR DATA RECEIVED")
+                # client Address: self.client_address[0]))
+            except:
+                pass
 
 
 class VideoStreamHandler(socketserver.StreamRequestHandler):
