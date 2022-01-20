@@ -3,6 +3,7 @@ import cv2
 import threading
 import sys
 import numpy as np
+import time
 
 # get distance data
 sensor_data = None
@@ -31,7 +32,11 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
         stream_bytes = b' '
 
         try:
+            print("[SOCKET] IMAGE RECEIVED")
+            prevTime = 0
             while True:
+                curTime = time.time()
+
                 stream_bytes += self.rfile.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
                 last = stream_bytes.find(b'\xff\xd9')
@@ -45,6 +50,14 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
 
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
+
+                    sec = curTime - prevTime
+                    prevTime = curTime
+                    fps = 1/(sec)
+                    fps_text = "FPS : %0.1f" % fps
+
+                    cv2.putText(image, fps_text, (0, 30),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 5)
 
                     cv2.imshow('image', image)
                     cv2.imshow('mlp_image', roi)

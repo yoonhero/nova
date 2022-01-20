@@ -22,7 +22,7 @@ try:
             connection.flush()
             stream.seek(0)
             connection.write(stream.read())
-            if time.time() - start > 600:
+            if time.time() - start > 60:
                 stream.seek(0)
             stream.seek(0)
             stream.truncate()

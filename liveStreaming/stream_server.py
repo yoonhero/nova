@@ -4,9 +4,6 @@ import socket
 import struct
 from PIL import Image
 import matplotlib.pyplot as pl
-import sys
-sys.path.append(
-    "/Users/yoonseonghyeon/Desktop/YSH/programming/python/OurAICar")
 
 server_socket = socket.socket()
 
