@@ -7,6 +7,40 @@ import os
 from sklearn.model_selection import train_test_split
 
 
+def load_data(input_size, path):
+    print("Loading training data...")
+    start = time.time()
+
+    # load training data
+    X = np.empty((0, input_size))
+    y = np.empty((0, 4))
+    training_data = glob.glob(path)
+
+    # if no data, exit
+    if not training_data:
+        print("Data not found, exit")
+        sys.exit()
+
+    for single_npz in training_data:
+        with np.load(single_npz) as data:
+            train = data['train']
+            train_labels = data['train_labels']
+        X = np.vstack((X, train))
+        y = np.vstack((y, train_labels))
+
+    print("Image array shape: ", X.shape)
+    print("Label array shape: ", y.shape)
+
+    end = time.time()
+    print("Loading data duration: %.2fs" % (end - start))
+
+    # normalize data
+    X = X / 255.
+
+    # train validation split, 7:3
+    return train_test_split(X, y, test_size=0.3)
+
+
 class NeuralNetwork(object):
     def __init__(self):
         self.model = None
