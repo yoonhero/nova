@@ -30,10 +30,11 @@
 
 # HardWare Stack
 
-
 # SoftWare Stack
 
 ## Autonomous Car Simulation
+
+![image](https://github.com/yoonhero/OurAICar/blob/master/docs/simulation_structure.jpg?raw=true)
 
 ### Carla
 
@@ -42,9 +43,6 @@ CARLA is an open-source simulator for autonomous driving research. CARLA has bee
 ```
 .\CarlaUE4.exe -carla-port=2000
 ```
-
-
-
 
 ## Motor
 
