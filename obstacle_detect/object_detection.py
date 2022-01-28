@@ -11,27 +11,44 @@ def get_prediction(img_bytes,model):
     img = img_bytes
     # inference
     results = model(img, size=640)  
+    
     return results
 
-img = cv2.imread("test.jpg",cv2.COLOR_BGR2RGB)
 
+cap = cv2.VideoCapture("./driving_video/driving2.mp4")
 
-processed_img = get_prediction(img, model)
-# # RGB_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
-# im_arr = cv2.imencode('.jpg', processed_img)[1]
+while cap.isOpened():
+    ret, frame = cap.read()
+    
+    if ret:
+        try:
+            img = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+            img = cv2.resize(img, (560, 860))
 
-# cv2.imwrite('result.jpg', im_arr)
-processed_img.render()
+            results = get_prediction(img, model)
+            results.render()
 
+            processed_img = cv2.cvtColor(results.imgs[0], cv2.COLOR_BGR2RGB)
+            
+                    
+            # print(results.xyxy[0])  # img1 predictions (tensor)
+            print(results.pandas().xyxy[0])  # img1 predictions (pandas)
+                    
+            # # compute difference
+            # difference = cv2.subtract(img, processed_img)
 
-RGB_img = cv2.cvtColor(processed_img.imgs[0], cv2.COLOR_BGR2RGB)
-# im_arr = cv2.imencode('.jpg', RGB_img)[1]
+            #         # color the mask red
+            # Conv_hsv_Gray = cv2.cvtColor(difference, cv2.COLOR_BGR2GRAY)
+            # ret, mask = cv2.threshold(Conv_hsv_Gray, 0, 255,cv2.THRESH_BINARY_INV |cv2.THRESH_OTSU)
+            # difference[mask != 255] = [0, 0, 255]
 
-cv2.imwrite('result.jpg', RGB_img)    
+            
+            cv2.imshow('Result', processed_img)
+            # cv2.imshow('Diff', difference)
 
-# plt.imshow(RGB_img)
-# plt.title('Image')
-# plt.show()
-
-cv2.imshow('Result', RGB_img)
-cv2.waitKey()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        finally:
+            break
+cap.release()
+cv2.destroyAllWindows()
