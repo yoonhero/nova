@@ -1,30 +1,44 @@
-import cv2
-import random
-import matplotlib.pyplot as plt
-import time
-import argparse
+#!/usr/bin/env python
+
+# Copyright (c) 2022 Yoonhero06 
+# Sema HighSchool Students
+#
+# This work is licensed under the terms of the MIT licenses.
+
+# Send Driving Information to the Cloud Server.
+# Simulation Live Streaming Client Code.
+
+from __future__ import print_function
+
 import sys
 import os
 import glob
-import carla
-import re
-import weakref
-import datetime
-import logging
-import random
-import collections
-
-from carla import ColorConverter as cc
-
-from manual_control import find_weather_presets
 
 try:
-    sys.path.append(glob.glob('../carla/dist/carla-%d.%d-%s.egg' % (
+    sys.path.append(glob.glob('carla/dist/carla-%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
 except IndexError:
     pass
+
+import carla
+
+from carla import ColorConverter as cc
+
+
+import cv2
+import random
+import matplotlib.pyplot as plt
+import time
+import argparse
+import re
+import weakref
+from datetime import datetime
+import logging
+import random
+import collections
+import open3d as o3d
 
 
 try:
@@ -75,6 +89,9 @@ try:
     import numpy as np
 except ImportError:
     raise RuntimeError("cannot import numpy, make sure numpy package is installed")
+
+
+######################## GLOBAL VARIABLES ##############################
 
 
 
@@ -311,44 +328,87 @@ class KeyboardControl(object):
 
 ######################## MAIN FUNCTION ###########################
 
-def main():
-    actorList = []
+def main(arg):
     try:
-        client = carla.Client("localhost",2000)
+        client = carla.Client(arg.host, arg.port)
         client.set_timeout(10.0)
-        world = client.load_world("Town02")
-        print(client.get_available_maps())
-
-        blueprintLibrary = world.get_blueprint_library()
-        vechile_bp = blueprintLibrary.filter('cybertruck')[0]
-        transform = carla.Transform(carla.Location(x=130, y=195, z=40), carla.Rotation(yaw=180))
-        vechile = world.spawn_actor(vechile_bp, transform)
-        actorList.append(vechile)
-        
-        camera_bp = blueprintLibrary.find('sensor.camera.rgb')
-        camera_bp.set_attribute('image_size_x', str(800))
-        camera_bp.set_attribute('image_size_y', str(600))
-        camera_bp.set_attribute('fov', str(90))
-        camera_transform = carla.Transform(carla.Location(x=1.5, z=2.4))
-        camera = world.spawn_actor(camera_bp,camera_transform, attach_to=vechile)
-        # camera.listen(lambda image: image.save_to_disk('output/%d064.png'%image.frame))
-
-        transform.rotation.yaw = -180 
-        for _ in range(0, 10):
-            transform.location.x += 8
-            bp = blueprintLibrary.filter('cybertruck')[0]
-            npc = world.try_spawn_actor(bp, transform)
-
-            if npc is not None:
-                actorList.append(npc)
-                npc.set_autopilot = True
-                print('craeted%s'%npc.type_id)
-        
-        time.sleep(15)
+        world = client.load_world("Town03")
         
     finally:
         print("delete actorList")
         client.apply_batch([carla.command.DestroyActor(x) for x in actorList])
 
 if __name__ == '__main__':
-    main()
+    argparser = argparse.ArgumentParser(description=__doc__)
+    
+    argparse.add_argument(
+        '--host',
+        metavar="H",
+        default="localhost",
+        help="IP of the host CARLA Simulator (default:localhost)"
+    )
+    argparse.add_argument(
+        '-p', '--port',
+        metavar='P',
+        default=2000,
+        type=int,
+        help="TCP Port of CARLA Simulator (default:2000)"
+    )
+    argparser.add_argument(
+        '--no-autopilot',
+        action="store_false",
+        help="disalbes the autopilot so the vehicle will remain stopped"
+    )
+    argparser.add_argument(
+        '--show-axis'm,
+        action="store_true",
+        help="show the cartesian coordinates axis"
+    )
+    argparser.add_argument(
+        '--upper-fov',
+        default=15.0,
+        type=float,
+        help='lidar\'s upper field of view in degrees (default: 15.0)')
+    argparser.add_argument(
+        '--lower-fov',
+        default=-25.0,
+        type=float,
+        help='lidar\'s lower field of view in degrees (default: -25.0)')
+    argparser.add_argument(
+        '--channels',
+        default=64.0,
+        type=float,
+        help='lidar\'s channel count (default: 64)')
+    argparser.add_argument(
+        '--range',
+        default=100.0,
+        type=float,
+        help='lidar\'s maximum range in meters (default: 100.0)')
+    argparser.add_argument(
+        '--points-per-second',
+        default=500000,
+        type=int,
+        help='lidar\'s points per second (default: 500000)')
+    argparser.add_argument(
+        '-x',
+        default=0.0,
+        type=float,
+        help='offset in the sensor position in the X-axis in meters (default: 0.0)')
+    argparser.add_argument(
+        '-y',
+        default=0.0,
+        type=float,
+        help='offset in the sensor position in the Y-axis in meters (default: 0.0)')
+    argparser.add_argument(
+        '-z',
+        default=0.0,
+        type=float,
+        help='offset in the sensor position in the Z-axis in meters (default: 0.0)')
+
+    # parse flags to args
+    args = argparser.parse_args()
+    
+    try:
+        main(args)
+    except KeyboardInterrupt:
+        print('##### Exited by user #####')

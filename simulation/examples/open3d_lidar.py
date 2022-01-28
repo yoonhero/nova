@@ -159,7 +159,7 @@ def add_open3d_axis(vis):
 def main(arg):
     """Main function of the script"""
     client = carla.Client(arg.host, arg.port)
-    client.set_timeout(2.0)
+    client.set_timeout(20.0)
     world = client.get_world()
 
     try:
@@ -321,6 +321,7 @@ if __name__ == "__main__":
     args = argparser.parse_args()
 
     try:
+        print(args.port, args.host)
         main(args)
     except KeyboardInterrupt:
         print(' - Exited by user.')
