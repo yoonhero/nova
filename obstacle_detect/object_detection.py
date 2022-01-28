@@ -22,7 +22,7 @@ while cap.isOpened():
     
     if ret:
             img = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-            img = cv2.resize(img, (560, 860))
+            img = cv2.resize(img, (1280, 760))
 
             results = get_prediction(img, model)
             results.render()
