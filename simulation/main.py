@@ -332,10 +332,134 @@ class KeyboardControl(object):
             if event.type == pygame.QUIT:
                 return True
             elif event.type == pygame.KEYUP:
-                if self._is_quite_shortcut(event.key):
+                if self._is_quit_shortcut(event.key):
                     return True
                 elif event.key == K_BACKSPACE:
+                    if self._autopilot_enabled:
+                        world.player.set_autopilot(False)
+                        world.restart()
+                        world.player.set_autopilot(True)
+                    else:
+                        world.restart()
+                
+                elif event.key == K_F1:
+                    world.hud.toggle_info()
+                
+                elif event.key == K_TAB:
+                    world.camera_manager.toggle_camera()
+                elif event.key == K_BACKQUOTE:
+                    world.camera_manager.next_sensor()
+                
+                ### Change Gear
+                elif event.key == K_w and (pygame.key.get_mods() & KMOD_CTRL):
+                    if world.constant_velocity_enabled:
+                        world.player.disable_constant_velocity()
+                        world.constant_velocity_enabled = False
+                        world.hud.notification("Disabled Constant Velocity Mode")
+                    
+                    else:
+                        world.player.enable_constant_velocity(carla.Vector3D(17, 0, 0))
+                        world.constant_velocity_enabled = True
+                        world.hud.notification("Enabled Constant Velocity Mode at 60 km/h")
+
+                elif event.key == K_t and (pygame.key.get_mods() & KMOD_CTRL):
+                    self._autopilot_enabled = False if self._autopilot_enabled else True
+                    world.player.set_autopilot(self._autopilot_enabled)
                     world.restart()
+
+                ### Toggle Recording 
+                elif event.key == K_r and not (pygame.key.get_mods() & KMOD_CTRL):
+                    world.camera_manager.toggle_recording()
+                
+                elif event.key == K_p and (pygame.key.get_mods() & KMOD_CTRL):
+                    # stop recorder
+                    client.stop_recorder()
+                    world.recording_enabled = False
+                    
+                    #work around to fix camera at start of replaying
+                    current_index = world.camera_manager.index
+                    world.destroy_sensors()
+                    
+                    # disable autopilot
+                    self._autopilot_enabled = False
+                    world.player.set_autopilot(self._autopilot_enabled)
+                    world.hud.notification("Replaying file 'manual_recording.rec'")
+
+                    #replayer
+                    client.replay_file("manual_recording.rec", world.recording_start, 0, 0)
+                    world.camera_manager.set_sensor(current_index)
+
+                if isinstance(self._control, carla.VehicleControl):
+                    if event.key == K_q:
+                        self._control.gear = 1 if self._control.reverse else -1
+                    elif event.key == K_m:
+                        self._control.manual_gear_shift = not self._control.manual_gear_shift
+                        self._control.gear = world.player.get_control().gear
+                        world.hud.notification("%s Transmission" % ('Manual' if self._control.manual_gear_shift else 'Automatic'))
+
+                    elif self._control.manual_gear_shift and event.key == K_COMMA:
+                        self._control.gear = max(-1, self._control.gear - 1)
+                    elif self._control.manual_gear_shift and event.key == K_PERIOD:
+                        self._control.gear = self._control.gear + 1
+
+        if not self._autopilot_enabled:
+            if isinstance(self._control, carla.VehicleControl):
+                self._parse_vehicle_keys(pygame.key.get_pressed(), clock.get_time())
+                self._control.reverse = self._control.gear < 0
+                # Set automatic control-related vehicle lights
+                if self._control.brake:
+                    current_lights |= carla.VehicleLightState.Brake
+                else: # Remove the Brake flag
+                    current_lights &= ~carla.VehicleLightState.Brake
+                if self._control.reverse:
+                    current_lights |= carla.VehicleLightState.Reverse
+                else: # Remove the Reverse flag
+                    current_lights &= ~carla.VehicleLightState.Reverse
+                if current_lights != self._lights: # Change the light state only if necessary
+                    self._lights = current_lights
+                    world.player.set_light_state(carla.VehicleLightState(self._lights))
+            elif isinstance(self._control, carla.WalkerControl):
+                self._parse_walker_keys(pygame.key.get_pressed(), clock.get_time(), world)
+            world.player.apply_control(self._control)
+            
+    
+    def _parse_vehicle_keys(self, keys, milliseconds):
+        if keys[K_UP] or keys[K_w]:
+            self._control.throttle = min(self._control.throttle + 0.01, 0.5)
+        else:
+            
+            self._control.throttle -= 0.1
+            if self._control.throttle < 0:
+                self._control.throttle = 0
+        
+        if keys[K_DOWN] or keys[K_s]:
+            self._control.brake = min(self._control.brake + 0.2, 1)
+        else:
+            self._control.brake = 0
+        
+        steer_increment = 5e-4 * milliseconds
+        if keys[K_LEFT] or keys[K_a]:
+            if self._steer_cache > 0:
+                self._steer_cache = 0        
+            else:
+                self._steer_cache -= steer_increment
+        
+        elif keys[K_RIGHT] or keys[K_d]:
+            if self._steer_cache < 0:
+                self._steer_cache = 0
+            else:
+                self._steer_cache += steer_increment
+                
+        else:
+            self._steer_cache = 0.0
+        
+        self._steer_cache = min(0.7, max(-0.7, self._steer_cache))
+        self._control.steer = round(self._steer_cache, 1)
+    
+    @staticmethod
+    def _is_quit_shortcut(key):
+        return (key == K_ESCAPE) or (key == K_q and pygame.key.get_mods() & KMOD_CTRL)
+
 
 
 ######################## HUD #########################
