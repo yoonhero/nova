@@ -39,6 +39,7 @@ import logging
 import random
 import collections
 import open3d as o3d
+import logging
 
 
 try:
@@ -250,7 +251,7 @@ class World(object):
     def toggle_radar(self):
         if self.radar_sensor is None:
             self.radar_sensor = RadarSensor(self.player)
-        elif self.radar_sensor.sensor is not None:
+        elif self.rdar_sensor.sensor is not None:
             self.radar_sensor.sensor.destroy()
             self.radar_sensor = None
 
@@ -354,7 +355,18 @@ def main(arg):
 
         user_offset = carla.Location(arg.x, arg.y, arg.z)
         
-        
+        frame = 0
+        dt0 = datetime.now()
+
+        while True:
+            time.sleep(0.005)
+            world.tick()
+
+            process_time = datetime.now() - dt0
+            sys.stdout.write('\r' + 'FPS: ' + str(1.0 / process_time.total_seconds()) )
+            sys.stdout.flush()
+            dt0 = datetime.now()
+            frame += 1
 
     finally:
         world.apply_settings(original_settings)
@@ -366,13 +378,13 @@ def main(arg):
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description=__doc__)
     
-    argparse.add_argument(
+    argparser.add_argument(
         '--host',
         metavar="H",
         default="localhost",
         help="IP of the host CARLA Simulator (default:localhost)"
     )
-    argparse.add_argument(
+    argparser.add_argument(
         '-p', '--port',
         metavar='P',
         default=2000,
@@ -391,53 +403,46 @@ if __name__ == '__main__':
         help="disalbes the autopilot so the vehicle will remain stopped"
     )
     argparser.add_argument(
-        '--show-axis',
-        action="store_true",
-        help="show the cartesian coordinates axis"
-    )
+        '--res',
+        metavar='WIDTHxHEIGHT',
+        default='1280x720',
+        help='Window resolution (default: 1280x720)')
+    
     argparser.add_argument(
-        '--upper-fov',
-        default=15.0,
-        type=float,
-        help='lidar\'s upper field of view in degrees (default: 15.0)')
+        '--sync',
+        action='store_true',
+        help='Synchronous mode execution')
     argparser.add_argument(
-        '--lower-fov',
-        default=-25.0,
-        type=float,
-        help='lidar\'s lower field of view in degrees (default: -25.0)')
+        '--filter',
+        metavar='PATTERN',
+        default='vehicle.*',
+        help='Actor filter (default: "vehicle.*")')
     argparser.add_argument(
-        '--channels',
-        default=64.0,
-        type=float,
-        help='lidar\'s channel count (default: 64)')
+        '-l', '--loop',
+        action='store_true',
+        dest='loop',
+        help='Sets a new random destination upon reaching the previous one (default: False)')
     argparser.add_argument(
-        '--range',
-        default=100.0,
-        type=float,
-        help='lidar\'s maximum range in meters (default: 100.0)')
+        "-a", "--agent", type=str,
+        choices=["Behavior", "Basic"],
+        help="select which agent to run",
+        default="Behavior")
     argparser.add_argument(
-        '--points-per-second',
-        default=500000,
-        type=int,
-        help='lidar\'s points per second (default: 500000)')
+        '-b', '--behavior', type=str,
+        choices=["cautious", "normal", "aggressive"],
+        help='Choose one of the possible agent behaviors (default: normal) ',
+        default='normal')
     argparser.add_argument(
-        '-x',
-        default=0.0,
-        type=float,
-        help='offset in the sensor position in the X-axis in meters (default: 0.0)')
-    argparser.add_argument(
-        '-y',
-        default=0.0,
-        type=float,
-        help='offset in the sensor position in the Y-axis in meters (default: 0.0)')
-    argparser.add_argument(
-        '-z',
-        default=0.0,
-        type=float,
-        help='offset in the sensor position in the Z-axis in meters (default: 0.0)')
-
+        '-s', '--seed',
+        help='Set seed for repeating executions (default: None)',
+        default=None,
+        type=int)
+    
     # parse flags to args
     args = argparser.parse_args()
+    
+    args.width, args.height = [int(x) for x in args.res.split("x")]
+
     
     try:
         main(args)
