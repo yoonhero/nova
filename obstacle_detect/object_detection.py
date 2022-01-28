@@ -15,13 +15,12 @@ def get_prediction(img_bytes,model):
     return results
 
 
-cap = cv2.VideoCapture("./driving_video/driving2.mp4")
+cap = cv2.VideoCapture("./driving_video/driving3.mp4")
 
 while cap.isOpened():
     ret, frame = cap.read()
     
     if ret:
-        try:
             img = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             img = cv2.resize(img, (560, 860))
 
@@ -48,7 +47,5 @@ while cap.isOpened():
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-        finally:
-            break
 cap.release()
 cv2.destroyAllWindows()
