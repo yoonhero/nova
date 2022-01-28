@@ -329,14 +329,39 @@ class KeyboardControl(object):
 ######################## MAIN FUNCTION ###########################
 
 def main(arg):
-    try:
-        client = carla.Client(arg.host, arg.port)
-        client.set_timeout(10.0)
-        world = client.load_world("Town03")
+    client = carla.Client(arg.host, arg.port)
+    client.set_timeout(10.0)
+    world = client.load_world("Town03")
+
+    try:    
+        original_settings = world.get_settings()
+        settings = world.get_settings()
+        traffic_manager = client.get_trafficmanager(8000)
+        traffic_manager.set_synchronous_mode(True)
+
+        delta = 0.05
         
+        settings.fixed_delta_seconds = delta
+        settings.synchronous_mode = True
+        settings.no_rendering_mode = arg.no_rendering
+        world.apply_settings(settings)
+        
+        blueprint_library = world.get_blueprint_library()
+        vehicle_bp = blueprint_library.filter("model3")[0]
+        vehicle_transform = random.choice(world.get_map().get_spawn_points())
+        vehicle = world.spawn_actor(vehicle_bp, vehicle_transform)
+        vehicle.set_autopilot(arg.no_autopilot)
+
+        user_offset = carla.Location(arg.x, arg.y, arg.z)
+        
+        
+
     finally:
-        print("delete actorList")
-        client.apply_batch([carla.command.DestroyActor(x) for x in actorList])
+        world.apply_settings(original_settings)
+        traffic_manager.set_synchronous_mode(False)
+
+        vehicle.destroy()
+        
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -355,12 +380,18 @@ if __name__ == '__main__':
         help="TCP Port of CARLA Simulator (default:2000)"
     )
     argparser.add_argument(
+        '--no-rendering',
+        action='store_true',
+        help='use the no-rendering mode which will provide some extra'
+        ' performance but you will lose the articulated objects in the'
+        ' lidar, such as pedestrians')
+    argparser.add_argument(
         '--no-autopilot',
         action="store_false",
         help="disalbes the autopilot so the vehicle will remain stopped"
     )
     argparser.add_argument(
-        '--show-axis'm,
+        '--show-axis',
         action="store_true",
         help="show the cartesian coordinates axis"
     )
