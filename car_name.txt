@@ -1,0 +1,5 @@
+
+estonto	n	future
+linio	n	line
+nova	adj	new
+speco	n	kind, sort
