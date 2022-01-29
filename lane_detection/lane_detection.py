@@ -1,8 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from motor import motor
-from obstacle_detect import obstacle
+
 
 # BGR opencv color map (Blue, Green, Red)
 blue = (255, 0, 0)
@@ -102,12 +101,13 @@ def draw_center_line(image, coordinate):
 # class: Auto Drive System
 class Steering_System():
     def __init__(self):
-        try:
-            self.obstacle_detect = obstacle.ObstacleDetect()
-            self.Motor = motor.Motor()
-            print("Success!! Setting motor drive!!")
-        except:
-            print("Failed to setting motor driver ...")
+        print("### Steering System ###")        
+        # try:
+        #     self.obstacle_detect = obstacle.ObstacleDetect()
+        #     self.Motor = motor.Motor()
+        #     print("Success!! Setting motor drive!!")
+        # except:
+        #     print("Failed to setting motor driver ...")
 
     def predict(self, image, lines):
         try:
@@ -128,7 +128,7 @@ class Steering_System():
                     cv2.line(
                         line_image, (horizontal_center, vertical_center+gap), (horizontal_center, vertical_center-gap), dark_green, 8)
             draw_center_line(line_image, (ho, ve))
-            stop = self.obstacle_detect.recognize(line_image)
+            # stop = self.obstacle_detect.recognize(line_image)
             # cv2.putText(line_image, stop, (0, 0),
             #             cv2.FONT_HERSHEY_SIMPLEX, 2, red, 5)
             return line_image
@@ -177,14 +177,28 @@ class Lane_Detection():
             combo_image = cv2.addWeighted(
                 combo_image, 0.8, predict_image, 1, 1)
         except:
-            return combo_image
+            pass
+        return combo_image
 
 
-if __name__ == '__main__':
-    image = cv2.imread('road_sample.jpg')
-
+if __name__ == '__main__':   
+    cap = cv2.VideoCapture("./data/lane_detection_3.mp4")
     lane_detection = Lane_Detection()
-    result = lane_detection.detect(image)
+    while True:
+        ret, frame = cap.read()
+        if ret:
+            result = lane_detection.detect(frame)
+            cv2.imshow('Lane Detection', result)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            print('video is ended')
 
-    cv2.imshow("result", result)
-    cv2.waitKey(0)
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+
+    cap.release()
+
+    cv2.destroyAllWindows()
+ 
+
