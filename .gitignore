@@ -144,3 +144,5 @@ obstacle_detect/yolov5
 
 obstacle_detect/train_result
 obstacle_detect/yolo_detection
+
+train_result/
