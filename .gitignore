@@ -138,11 +138,8 @@ dmypy.json
 cython_debug/
 *.mp4
 
-obstacle_detect/dataset
+object_detection/dataset
 
-obstacle_detect/yolov5
-
-obstacle_detect/train_result
-obstacle_detect/yolo_detection
+object_detection/yolov5
 
 train_result/
