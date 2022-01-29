@@ -143,3 +143,7 @@ object_detection/dataset
 object_detection/yolov5
 
 train_result/
+
+
+
+simulation/simple/IMG
