@@ -50,7 +50,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
 
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
-
+                    
                     sec = curTime - prevTime
                     prevTime = curTime
                     fps = 1/(sec)

@@ -1,82 +1,115 @@
-from object_detection import ObstacleDetect
-import io
-import socket
-import struct
-from PIL import Image
-import matplotlib.pyplot as pl
+import socketserver
 import cv2
+import threading
+import sys
 import numpy as np
 import time
+import math
+from object_detection.main import ObjectDetection
+from lane_detection.lane_detection import LaneDetection
 
-server_socket = socket.socket()
-
-ipAddress = "172.30.1.34"
-portNum = 8000
-
-server_socket.bind((ipAddress, portNum))
-server_socket.listen(0)
-
-# Object Detection Module
-obstacle_detect = ObstacleDetect()
+# get distance data
+sensor_data = None
 
 
-# Accept a single connection and make a file-like object out of it
-connection = server_socket.accept()[0].makefile('rb')
-try:
-    img = None
-    prevTime = 0
-    while True:
-        # Read the length of the image as a 32-bit unsigned int.
-        image_len = struct.unpack(
-            '<L', connection.read(struct.calcsize('<L')))[0]
+object_detection = ObjectDetection(320, 240)
+lane_detection = LaneDetection()
 
-        # if image is None break loop
-        if not image_len:
-            break
 
-        # Construct a stream to hold the image data and read the image
-        # data from the connection
-        image_stream = io.BytesIO()
-        image_stream.write(connection.read(image_len))
-        # Rewind the stream, open it as an image with PIL and do some
-        # processing on it
-        image_stream.seek(0)
-        image = Image.open(image_stream)
+# Distance Data from Arduino Sensor
+class SensorDataHandler(socketserver.BaseRequestHandler):
 
-        if img is None:
-            img = pl.imshow(image)
-        else:
-            img.set_data(image)
+    data = " "
 
-        pl.pause(0.01)
-        pl.draw()
+    def handle(self):
+        global sensor_data
+        while self.data:
+            try:
+                self.data = self.request.recv(1024)
+                sensor_data = round(float(self.data), 1)
+                print("[SOCKET] SENSOR DATA RECEIVED")
+                # client Address: self.client_address[0]))
+            except:
+                pass
 
-        print('Image is %dx%d' % image.size)
-        image.verify()
-        print('Image is verified')
 
-        curTime = time.time()
+class VideoStreamHandler(socketserver.StreamRequestHandler):
 
-        # process the image
-        convertedImg = image.convert("RGB")
-        open_cv_image = np.array(convertedImg)
-        # Convert RGB to BGR
-        open_cv_image = open_cv_image[:, :, ::-1].copy()
+    def handle(self):
+        global sensor_data
+        stream_bytes = b' '
 
-        image_with_obstacle_detection, stop = obstacle_detect.recognize(
-            open_cv_image)
+        try:
+            print("[SOCKET] IMAGE RECEIVED")
+            prevTime = 0
+            while True:
+                curTime = time.time()
 
-        sec = curTime - prevTime
-        prevTime = curTime
-        fps = 1/(sec)
-        fps_text = "FPS : %0.1f" % fps
+                stream_bytes += self.rfile.read(1024)
+                first = stream_bytes.find(b'\xff\xd8')
+                last = stream_bytes.find(b'\xff\xd9')
+                if first != -1 and last != -1:
+                    jpg = stream_bytes[first:last + 2]
+                    stream_bytes = stream_bytes[last + 2:]
 
-        cv2.putText(image_with_obstacle_detection, fps_text, (0, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 5)
-        cv2.imshow("Obstacle Detected Img", image_with_obstacle_detection)
-        if stop:
-            print("STOP!! Obstacle Detected")
+                    gray = cv2.imdecode(np.frombuffer(
+                        jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+                    image = cv2.imdecode(np.frombuffer(
+                        jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
 
-finally:
-    connection.close()
-    server_socket.close()
+                    height, width = gray.shape
+                    roi = gray[int(height/2):height, :]
+
+                    image_with_lanes = lane_detection.detect(image, advance_view=True)
+                    image_with_detection, _, _ = object_detection.process(image_with_lanes)
+                    
+                    #### FPS Calculate ####                        
+                    sec = curTime - prevTime
+                    prevTime = curTime
+                    fps = 1/(sec)
+                    fps_text = "FPS : %0.1f" % fps
+
+                    cv2.putText(image, fps_text, (0, 30),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 5)
+
+                    cv2.imshow('image', image)
+                    cv2.imshow('mlp_image', roi)
+                    cv2.imshow("result", image_with_detection)
+
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                        print("car stopped")
+                        break
+
+        finally:
+            cv2.destroyAllWindows()
+            sys.exit()
+
+
+class Server(object):
+    def __init__(self, host, port1, port2):
+        self.host = host
+        self.port1 = port1
+        self.port2 = port2
+
+    def video_stream(self, host, port):
+        s = socketserver.TCPServer((host, port), VideoStreamHandler)
+        s.serve_forever()
+
+    def sensor_stream(self, host, port):
+        s = socketserver.TCPServer((host, port), SensorDataHandler)
+        s.serve_forever()
+
+    def start(self):
+        sensor_thread = threading.Thread(
+            target=self.sensor_stream, args=(self.host, self.port2))
+        sensor_thread.deamon = True
+        sensor_thread.start()
+
+        self.video_stream(self.host, self.port1)
+
+
+if __name__ == "__main__":
+    h, p1, p2 = "172.30.1.44", 8000, 8002
+
+    ts = Server(h, p1, p2)
+    ts.start()
