@@ -29,13 +29,6 @@ Please install [Tensorflow](https://github.com/tensorflow/tensorflow) and [Pytor
 
 
 
-## HardWare Stack
-
-### Steering System
-
-![steering](https://www.howacarworks.com/illustration/118/the-rack-and-pinion-system.png)
-
-
 ## SoftWare Stack
 
 ### Autonomous Car Simulation
@@ -161,6 +154,8 @@ It will operate with LEVEL 4 AI.
   - [ ] Car Advanced Control
   - [ ] Test 
   - [ ] Publishing
+
+
 # Contribute
 
 Please contact yoonhero06@naver.com to make this project together.
