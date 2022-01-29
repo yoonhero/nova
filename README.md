@@ -167,4 +167,4 @@ Please contact yoonhero06@naver.com to make this project together.
 
 # License
 
-MIT License
+[MIT License](https://github.com/yoonhero/OurAICar/blob/master/LICENSE.md)
