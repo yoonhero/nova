@@ -1,1 +1,1 @@
-__all__ = ["object_detect"]
+__all__ = ["object_detection"]

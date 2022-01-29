@@ -1,4 +1,4 @@
-from obstacle_detect.obstacle import ObstacleDetect
+from object_detection import ObstacleDetect
 import io
 import socket
 import struct

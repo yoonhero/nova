@@ -138,7 +138,7 @@ class Steering_System():
 # class: lane detection
 
 
-class Lane_Detection():
+class LaneDetection():
     def __init__(self):
         self.automatic_drive = Steering_System()
 
