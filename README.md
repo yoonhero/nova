@@ -1,4 +1,4 @@
-![logo](https://capsule-render.vercel.app/api?type=waving&color=e5383b&height=300&section=header&text=Estonto&fontAlignY=40&fontSize=90&fontColor=d3d3d3&animation=fadeIn&desc=AutonomouseCar&descSize=30&descAlignY=60)
+![logo](https://capsule-render.vercel.app/api?type=waving&color=e5383b&height=300&section=header&text=Nova&fontAlignY=40&fontSize=90&fontColor=d3d3d3&animation=fadeIn&desc=AutonomouseCar&descSize=30&descAlignY=60)
 
 # Instroduction 
 
@@ -8,7 +8,7 @@
 
 Making something by myself is my favorite hobby. I want to use my technological skills to make the most profound task for the engineer. It is Autonomous Self Driving Car. This project will have started in 2021 March. For time to time, I am learning many tech skills like React, Next. And I came back to finish this project. I am looking forward to using this car in the real road someday. 
 
-This car's name <strong>["Estonto"](https://en.wiktionary.org/wiki/estonto)</strong> is named after Esperanto. This means Future!
+This car's name <strong>["Nova"](https://en.wiktionary.org/wiki/nova)</strong> is named after Esperanto. This means New!
 
 
 ![image](https://github.com/yoonhero/OurAICar/blob/master/docs/software_structure.jpg?raw=true)
