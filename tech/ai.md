@@ -60,3 +60,29 @@ for i in range(10000):
     solutions = newGen
 
 ```
+
+## Reinforcement Learning
+
+<strong>Reinforcement Learning</strong>은 <strong>시도와 실패</strong>(Trial and Error)를 통해 학습하는 autonomous, self-teaching system이다. 이것은 보상의 극대화에 초점을 두고 행동하며, 최상의 결과를 얻기 위해 학습한다.
+
+### Snake Game
+
+[1, 0, 0] -> Straight
+
+[0, 1, 0] -> Right
+
+[0, 0, 1] -> Left
+
+<strong>State</strong>
+
+- danger straight
+- danger right
+- danger left
+- direction left
+- direction right
+- direction up
+- direction down
+- food left
+- food right
+- food up
+- food down
