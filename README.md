@@ -1,15 +1,14 @@
 ![logo](https://capsule-render.vercel.app/api?type=waving&color=e5383b&height=300&section=header&text=Nova&fontAlignY=40&fontSize=90&fontColor=d3d3d3&animation=fadeIn&desc=AutonomouseCar&descSize=30&descAlignY=60)
 
-# Instroduction 
+# Instroduction
 
 [Beta Version 1.0 Demo](https://www.youtube.com/watch?v=kk2jRKFPXv0)
 
 이 프로젝트를 완성하는 것이 세상을 바꾸기 위한 작은 발걸음이 될 것이라고 생각하고 열심히 노력하고 있습니다.
 
-Making something by myself is my favorite hobby. I want to use my technological skills to make the most profound task for the engineer. It is Autonomous Self Driving Car. This project will have started in 2021 March. For time to time, I am learning many tech skills like React, Next. And I came back to finish this project. I am looking forward to using this car in the real road someday. 
+Making something by myself is my favorite hobby. I want to use my technological skills to make the most profound task for the engineer. It is Autonomous Self Driving Car. This project will have started in 2021 March. For time to time, I am learning many tech skills like React, Next. And I came back to finish this project. I am looking forward to using this car in the real road someday.
 
 This car's name <strong>["Nova"](https://en.wiktionary.org/wiki/nova)</strong> is named after Esperanto. This means New!
-
 
 ![image](https://github.com/yoonhero/OurAICar/blob/master/docs/software_structure.jpg?raw=true)
 
@@ -26,8 +25,6 @@ pip install requirements
 ```
 
 Please install [Tensorflow](https://github.com/tensorflow/tensorflow) and [Pytorch](https://github.com/pytorch/pytorch) by following steps which introduces those installation guides.
-
-
 
 ## SoftWare Stack
 
@@ -56,11 +53,9 @@ I am using RPi.GPIO to manipulate microservice in Raspberry PI. I make a motor c
 
 ### Object detection
 
-Using Yolov5, object detection speed is absolutely fast. And this is really real time. It was trained with around 20000 pictures with labelling Car, Pedestrian, Truck, Traffic Light. 
-
+Using Yolov5, object detection speed is absolutely fast. And this is really real time. It was trained with around 20000 pictures with labelling Car, Pedestrian, Truck, Traffic Light.
 
 ![image](https://github.com/yoonhero/OurAICar/blob/master/docs/objectdetect.PNG?raw=true)
-
 
 ### Line Detection
 
@@ -111,7 +106,7 @@ Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보�
 - HTTP Request 에 대한 정보(Method, URL, Data, ...)
 - Callback 함수
 
-## Project Steps 
+## Project Steps
 
 <strong>[Beta ver 1.0](https://www.youtube.com/watch?v=kk2jRKFPXv0)</strong>
 
@@ -121,21 +116,21 @@ Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보�
   - [x] Steering System with Motor
 - Software
   - Arduino
-    - [x] Motor Control with Arduino  
+    - [x] Motor Control with Arduino
     - [x] Bluetooth Car Control
-  - Python  
+  - Python
     - [x] Simple Lane Detection
     - [x] Simple Yolov2 Object Detection
-    - [x] GPIO Motor Control 
-  
+    - [x] GPIO Motor Control
+
 <strong>Beta ver 2.0</strong>
 
 I'm planning to make LEVEL 3 AI.
 
-- [x] RaspberryPi Ultrasonic Sensor and LED 
+- [x] RaspberryPi Ultrasonic Sensor and LED
 - [x] Live Streaming
 - [ ] Sensor Socket Server (Almost Done)
-- [X] Object Detection Fastly with Yolov5
+- [x] Object Detection Fastly with Yolov5
 - [ ] Lane Detection To Visualize User GUI
 - [ ] Steering CNN AI
 - [ ] Image Processing Optimization
@@ -149,12 +144,11 @@ It will operate with LEVEL 4 AI.
 - Hardware
   - [ ] Car Advanced Steering System
   - [ ] And Various Updates...
-- Software 
-  - [ ] AI Optimize to Raspberry pi 
+- Software
+  - [ ] AI Optimize to Raspberry pi
   - [ ] Car Advanced Control
-  - [ ] Test 
+  - [ ] Test
   - [ ] Publishing
-
 
 # Contribute
 
