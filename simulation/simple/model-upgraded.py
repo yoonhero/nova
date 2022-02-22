@@ -65,21 +65,20 @@ def train_model(model, args, X_train, X_valid, y_train, y_valid):
     checkpoint = ModelCheckpoint("model-{epoch:03d}.h5", monitor="val_loss",
                                  verbose=1, save_best_only=args.save_best_only, mode="auto")
 
-    model.compile(loss="categorical_crossentropy",
+    model.compile(loss="mean_squared_error",
                   metrics=['accuracy'],
-                  optimizer="adam")
+                  optimizer=Adam(lr=args.learning_rate))
 
     train_data, train_labels = batch_generator(args.data_dir, X_train, y_train, args.batch_size, True)
     
     X_test, Y_test = batch_generator(args.data_dir, X_valid, y_valid, args.batch_size, False)
     
-    print(Y_test)
     
     history = model.fit(
         train_data, train_labels,
         validation_data=(X_test, Y_test),
         callbacks=[checkpoint], 
-        epochs=args.nb_epoch
+        epochs=args.nb_epoch,verbose=1
     )
     
     print("\n Test Accuracy: %.4f" % (model.evaluate(X_test, Y_test)[1]))
@@ -103,7 +102,7 @@ def main():
     parser.add_argument('-k', help='drop out probability',
                         dest='keep_prob',         type=float, default=0.5)
     parser.add_argument('-n', help='number of epochs',
-                        dest='nb_epoch',          type=int,   default=30)
+                        dest='nb_epoch',          type=int,   default=50)
     parser.add_argument('-s', help='samples per epoch',
                         dest='samples_per_epoch', type=int,   default=20000)
     parser.add_argument('-b', help='batch size',

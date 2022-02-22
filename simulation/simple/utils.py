@@ -2,7 +2,7 @@ import cv2
 import os
 import numpy as np
 import matplotlib.image as mpimg
-
+import matplotlib.pyplot as plt
 
 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
@@ -12,6 +12,8 @@ def load_image(data_dir, image_file):
     """
     Load RGB images from a file
     """
+    plt.imshow(os.path.join(data_dir, image_file.strip()))
+    
     return mpimg.imread(os.path.join(data_dir, image_file.strip()))
 
 
@@ -142,7 +144,7 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
     Generate training image give image paths and associated steering angles
     """
     data_size = image_paths.shape[0] // batch_size * batch_size
-    print(data_size)
+    print(f'Size Of Data: {data_size}')
     train_X = np.empty([data_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS])
     train_Y = np.empty(data_size)
     
@@ -156,6 +158,7 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
             if is_training and np.random.rand() < 0.6:
                 image, steering_angle = augument(
                         data_dir, center, left, right, steering_angle)
+                print(image)
             else:
                 image = load_image(data_dir, center)
                 # add the image and steering angle to the batch
