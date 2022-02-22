@@ -12,8 +12,6 @@ def load_image(data_dir, image_file):
     """
     Load RGB images from a file
     """
-    plt.imshow(os.path.join(data_dir, image_file.strip()))
-    
     return mpimg.imread(os.path.join(data_dir, image_file.strip()))
 
 
@@ -158,7 +156,6 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
             if is_training and np.random.rand() < 0.6:
                 image, steering_angle = augument(
                         data_dir, center, left, right, steering_angle)
-                print(image)
             else:
                 image = load_image(data_dir, center)
                 # add the image and steering angle to the batch

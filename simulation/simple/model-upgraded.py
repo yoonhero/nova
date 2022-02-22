@@ -67,12 +67,13 @@ def train_model(model, args, X_train, X_valid, y_train, y_valid):
 
     model.compile(loss="mean_squared_error",
                   metrics=['accuracy'],
-                  optimizer=Adam(lr=args.learning_rate))
+                  optimizer=Adam(learning_rate=args.learning_rate))
 
     train_data, train_labels = batch_generator(args.data_dir, X_train, y_train, args.batch_size, True)
     
     X_test, Y_test = batch_generator(args.data_dir, X_valid, y_valid, args.batch_size, False)
     
+    # print(train_data, train_labels)
     
     history = model.fit(
         train_data, train_labels,
@@ -102,11 +103,11 @@ def main():
     parser.add_argument('-k', help='drop out probability',
                         dest='keep_prob',         type=float, default=0.5)
     parser.add_argument('-n', help='number of epochs',
-                        dest='nb_epoch',          type=int,   default=50)
+                        dest='nb_epoch',          type=int,   default=100)
     parser.add_argument('-s', help='samples per epoch',
                         dest='samples_per_epoch', type=int,   default=20000)
     parser.add_argument('-b', help='batch size',
-                        dest='batch_size',        type=int,   default=40)
+                        dest='batch_size',        type=int,   default=100)
     parser.add_argument('-o', help='save best models only',
                         dest='save_best_only',    type=s2b,   default='true')
     parser.add_argument('-l', help='learning rate',
