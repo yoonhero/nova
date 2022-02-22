@@ -20,9 +20,9 @@ def img_preprocess(img):
     img = img/255
     return img
 
-@sio.event
-def my_event(data):
-    print('Received data: ', data)
+# @sio.event
+# def my_event(data):
+#     print('Received data: ', data)
 
 @sio.on('telemetry')
 def telemetry(sid, data):
@@ -49,8 +49,11 @@ def send_control(steering_angle, throttle):
         'throttle': throttle.__str__()
     })
 
+def hello_world(data, da):
+    print(data, da)
 
 if __name__ == '__main__':
-    model = load_model('model.h5')
+    model = load_model('model-002.h5')
     app = socketio.Middleware(sio, app)
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
+    # sio.connect("http://0.0.0.0:4567")
