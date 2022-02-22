@@ -21,10 +21,23 @@ git clone https://github.com/yoonhero/OurAICar
 Cloning my Project...
 
 ```bash
-pip install requirements
+pip install -r requirements.txt
 ```
 
 Please install [Tensorflow](https://github.com/tensorflow/tensorflow) and [Pytorch](https://github.com/pytorch/pytorch) by following steps which introduces those installation guides.
+
+**Conda**
+
+```bash
+conda env create -f environment.yml
+```
+
+Export Requirements.yml
+
+```bash
+conda activate mlenv
+conda env export > environment.yml
+```
 
 ## SoftWare Stack
 
