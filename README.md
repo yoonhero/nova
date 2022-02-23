@@ -116,52 +116,52 @@ def another_event(sid, data):
 
 Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보를 Application 에 전달한다.
 
-- HTTP Request 에 대한 정보(Method, URL, Data, ...)
-- Callback 함수
+-   HTTP Request 에 대한 정보(Method, URL, Data, ...)
+-   Callback 함수
 
 ## Project Steps
 
 <strong>[Beta ver 1.0](https://www.youtube.com/watch?v=kk2jRKFPXv0)</strong>
 
-- Hardware
-  - [x] Simple Car Model
-  - [x] Set Various Arduino Sensor
-  - [x] Steering System with Motor
-- Software
-  - Arduino
-    - [x] Motor Control with Arduino
-    - [x] Bluetooth Car Control
-  - Python
-    - [x] Simple Lane Detection
-    - [x] Simple Yolov2 Object Detection
-    - [x] GPIO Motor Control
+-   Hardware
+    -   [x] Simple Car Model
+    -   [x] Set Various Arduino Sensor
+    -   [x] Steering System with Motor
+-   Software
+    -   Arduino
+        -   [x] Motor Control with Arduino
+        -   [x] Bluetooth Car Control
+    -   Python
+        -   [x] Simple Lane Detection
+        -   [x] Simple Yolov2 Object Detection
+        -   [x] GPIO Motor Control
 
 <strong>Beta ver 2.0</strong>
 
 I'm planning to make LEVEL 3 AI.
 
-- [x] RaspberryPi Ultrasonic Sensor and LED
-- [x] Live Streaming
-- [ ] Sensor Socket Server (Almost Done)
-- [x] Object Detection Fastly with Yolov5
-- [ ] Lane Detection To Visualize User GUI
-- [ ] Steering CNN AI
-- [ ] Image Processing Optimization
-- [ ] Test with Simulation
-- [ ] Publishing
+-   [x] RaspberryPi Ultrasonic Sensor and LED
+-   [x] Live Streaming
+-   [ ] Sensor Socket Server (Almost Done)
+-   [x] Object Detection Fastly with Yolov5
+-   [ ] Lane Detection To Visualize User GUI
+-   [ ] Steering CNN AI
+-   [ ] Image Processing Optimization
+-   [ ] Test with Simulation
+-   [ ] Publishing
 
 <strong>Beta ver 3.0</strong>
 
 It will operate with LEVEL 4 AI.
 
-- Hardware
-  - [ ] Car Advanced Steering System
-  - [ ] And Various Updates...
-- Software
-  - [ ] AI Optimize to Raspberry pi
-  - [ ] Car Advanced Control
-  - [ ] Test
-  - [ ] Publishing
+-   Hardware
+    -   [ ] Car Advanced Steering System
+    -   [ ] And Various Updates...
+-   Software
+    -   [ ] AI Optimize to Raspberry pi
+    -   [ ] Car Advanced Control
+    -   [ ] Test
+    -   [ ] Publishing
 
 # Contribute
 
