@@ -1,5 +1,7 @@
 ![logo](https://capsule-render.vercel.app/api?type=waving&color=e5383b&height=300&section=header&text=Nova&fontAlignY=40&fontSize=90&fontColor=d3d3d3&animation=fadeIn&desc=AutonomouseCar&descSize=30&descAlignY=60)
 
+[![wakatime](https://wakatime.com/badge/user/5f9867f2-894f-4b38-acf8-ebc89cb7f4e6/project/2fbb121c-40e4-4d78-8151-7bb4af59ba32.svg)](https://wakatime.com/badge/user/5f9867f2-894f-4b38-acf8-ebc89cb7f4e6/project/2fbb121c-40e4-4d78-8151-7bb4af59ba32)
+
 # Instroduction
 
 [Beta Version 1.0 Demo](https://www.youtube.com/watch?v=kk2jRKFPXv0)
