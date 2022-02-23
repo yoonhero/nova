@@ -145,7 +145,8 @@ I'm planning to make LEVEL 3 AI.
 -   [ ] Sensor Socket Server (Almost Done)
 -   [x] Object Detection Fastly with Yolov5
 -   [ ] Lane Detection To Visualize User GUI
--   [ ] Steering CNN AI
+-   [x] Steering CNN AI
+-   [ ] SLAM
 -   [ ] Image Processing Optimization
 -   [ ] Test with Simulation
 -   [ ] Publishing
