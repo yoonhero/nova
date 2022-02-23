@@ -16,8 +16,11 @@ mepa = [[1, 1, 1, 1, 1],
 
 
 class Minimap():
-    def __init__(self, map, posx, posy):
+    def __init__(self, map, posx, posy, exitx, exity):
         self.map = map
+
+        self.exitx = exitx
+        self.exity = exity
 
         self.BLACK = (0, 0, 0)
         self.WHITE = (255, 255, 255)
@@ -33,29 +36,34 @@ class Minimap():
         self.screen = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption("3d Ray Casting")
         self.draw_map(posx, posy)
+        self.screen.fill(self.WHITE)
 
-        print(self.map)
+        self.FPSCLOCK = pygame.time.Clock()
 
     def draw_map(self, posx, posy):
+        self.screen.fill(self.WHITE)
+
         for i in range(len(self.map)):
             for j in range(len(self.map[i])):
                 if self.map[i][j] != 0:
-                    print(i, j)
                     self.draw_rect(i, j)
+        self.draw_rect(self.exitx, self.exity, self.BLUE)
+        self.draw_circle(posx, posy)
 
-        self.update(posx, posy)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
 
-    def update(self, posx, posy):
-        # self.draw_circle(posx, posy)
-        # pygame.display.update()
-        return
+        # pygame.time.Clock().tick(30)
+        pygame.display.update()
 
-    def draw_rect(self, x, y):
-        pygame.draw.rect(self.screen, self.BLACK,
+    def draw_rect(self, x, y, c=(0, 0, 0)):
+        pygame.draw.rect(self.screen, c,
                          pygame.Rect([x*100, y*100, 100, 100]))
 
     def draw_circle(self, x, y):
-        pygame.draw.circle(self.screen, self.GREEN, (x*100+40, y*100+40), 80)
+        pygame.draw.circle(self.screen, self.GREEN, (x*100+10, y*100+10), 20)
 
     def quit(self):
         pygame.quit()
@@ -74,39 +82,10 @@ exitx, exity = (3, 3)
 # player rotation pi/4 = 45%
 rot = np.pi / 4
 
-# minimap = Minimap(mepa, posx, posy)
-
-
-# while True:
-#     time.sleep(1)
-#     minimap.draw_map(posx, posy)
-
-# minimap.quit()
-
-pygame.init()
-Surface = pygame.display.set_mode((600, 600))
-FPSCLOCK = pygame.time.Clock()
-pygame.display.set_caption("Test Window")
-
-
-def main():
-    while True:
-        Surface.fill((255, 255, 255))
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.update()
-        FPSCLOCK.tick(30)
-
-
-if __name__ == '__main__':
-    main()
+minimap = Minimap(mepa, posx, posy, exitx, exity)
 
 
 while True:
-    break
     plt.hlines(-0.6, 0, 60, colors="gray", lw=165, alpha=0.5)
     plt.hlines(0.6, 0, 60, colors="lightblue", lw=165, alpha=0.5)
     tilex, tiley, tilec = ([], [], [])
@@ -159,7 +138,7 @@ while True:
     elif key == "esc":
         break
 
-    minimap.update(posx, posy)
+    minimap.draw_map(posx, posy)
 
     if mepa[int(x)][int(y)] == 0:
         if int(posx) == exitx and int(posy) == exity:
