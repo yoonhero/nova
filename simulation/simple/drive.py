@@ -53,7 +53,7 @@ def hello_world(data, da):
     print(data, da)
 
 if __name__ == '__main__':
-    model = load_model('model-002.h5')
+    model = load_model('model.h5')
     app = socketio.Middleware(sio, app)
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
     # sio.connect("http://0.0.0.0:4567")
