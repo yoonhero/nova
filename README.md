@@ -1,5 +1,8 @@
 ![logo](https://capsule-render.vercel.app/api?type=waving&color=e5383b&height=300&section=header&text=Nova&fontAlignY=40&fontSize=90&fontColor=d3d3d3&animation=fadeIn&desc=AutonomouseCar&descSize=30&descAlignY=60)
 
+[![wakatime](https://wakatime.com/badge/user/5f9867f2-894f-4b38-acf8-ebc89cb7f4e6/project/2fbb121c-40e4-4d78-8151-7bb4af59ba32.svg)](https://wakatime.com/badge/user/5f9867f2-894f-4b38-acf8-ebc89cb7f4e6/project/2fbb121c-40e4-4d78-8151-7bb4af59ba32)
+[![wakatime](https://wakatime.com/badge/user/5f9867f2-894f-4b38-acf8-ebc89cb7f4e6/project/3addceec-91df-41fd-84dd-2024c24e77ae.svg)](https://wakatime.com/badge/user/5f9867f2-894f-4b38-acf8-ebc89cb7f4e6/project/3addceec-91df-41fd-84dd-2024c24e77ae)
+
 # Instroduction
 
 [Beta Version 1.0 Demo](https://www.youtube.com/watch?v=kk2jRKFPXv0)
@@ -116,52 +119,53 @@ def another_event(sid, data):
 
 Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보를 Application 에 전달한다.
 
-- HTTP Request 에 대한 정보(Method, URL, Data, ...)
-- Callback 함수
+-   HTTP Request 에 대한 정보(Method, URL, Data, ...)
+-   Callback 함수
 
 ## Project Steps
 
 <strong>[Beta ver 1.0](https://www.youtube.com/watch?v=kk2jRKFPXv0)</strong>
 
-- Hardware
-  - [x] Simple Car Model
-  - [x] Set Various Arduino Sensor
-  - [x] Steering System with Motor
-- Software
-  - Arduino
-    - [x] Motor Control with Arduino
-    - [x] Bluetooth Car Control
-  - Python
-    - [x] Simple Lane Detection
-    - [x] Simple Yolov2 Object Detection
-    - [x] GPIO Motor Control
+-   Hardware
+    -   [x] Simple Car Model
+    -   [x] Set Various Arduino Sensor
+    -   [x] Steering System with Motor
+-   Software
+    -   Arduino
+        -   [x] Motor Control with Arduino
+        -   [x] Bluetooth Car Control
+    -   Python
+        -   [x] Simple Lane Detection
+        -   [x] Simple Yolov2 Object Detection
+        -   [x] GPIO Motor Control
 
 <strong>Beta ver 2.0</strong>
 
 I'm planning to make LEVEL 3 AI.
 
-- [x] RaspberryPi Ultrasonic Sensor and LED
-- [x] Live Streaming
-- [ ] Sensor Socket Server (Almost Done)
-- [x] Object Detection Fastly with Yolov5
-- [ ] Lane Detection To Visualize User GUI
-- [ ] Steering CNN AI
-- [ ] Image Processing Optimization
-- [ ] Test with Simulation
-- [ ] Publishing
+-   [x] RaspberryPi Ultrasonic Sensor and LED
+-   [x] Live Streaming
+-   [ ] Sensor Socket Server (Almost Done)
+-   [x] Object Detection Fastly with Yolov5
+-   [ ] Lane Detection To Visualize User GUI
+-   [x] Steering CNN AI
+-   [ ] SLAM
+-   [ ] Image Processing Optimization
+-   [ ] Test with Simulation
+-   [ ] Publishing
 
 <strong>Beta ver 3.0</strong>
 
 It will operate with LEVEL 4 AI.
 
-- Hardware
-  - [ ] Car Advanced Steering System
-  - [ ] And Various Updates...
-- Software
-  - [ ] AI Optimize to Raspberry pi
-  - [ ] Car Advanced Control
-  - [ ] Test
-  - [ ] Publishing
+-   Hardware
+    -   [ ] Car Advanced Steering System
+    -   [ ] And Various Updates...
+-   Software
+    -   [ ] AI Optimize to Raspberry pi
+    -   [ ] Car Advanced Control
+    -   [ ] Test
+    -   [ ] Publishing
 
 # Contribute
 
