@@ -11,7 +11,9 @@ import cv2
 sio = socketio.Server()
 
 app = Flask(__name__) #'__main__'
-speed_limit = 10
+speed_limit = 40
+model = None
+
 def img_preprocess(img):
     img = img[60:135,:,:]
     img = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
@@ -28,6 +30,9 @@ def img_preprocess(img):
 def telemetry(sid, data):
     speed = float(data['speed'])
     image = Image.open(BytesIO(base64.b64decode(data['image'])))
+
+    # image.save('python.jpg')
+    
     image = np.asarray(image)
     image = img_preprocess(image)
     image = np.array([image])
@@ -53,7 +58,7 @@ def hello_world(data, da):
     print(data, da)
 
 if __name__ == '__main__':
-    model = load_model('model.h5')
+    model = load_model('model-advance2.h5')
     app = socketio.Middleware(sio, app)
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
     # sio.connect("http://0.0.0.0:4567")
