@@ -83,6 +83,36 @@ Youtube 및 여러 사이트를 참고해서 OpenCV 로 도로의 선을 추출�
 
 ![image](https://i.ytimg.com/vi/G2VaJvNNp4k/hqdefault.jpg)
 
+### Kalman Filter
+
+칼만 필터(Kalman filter)는 잡음이 포함되어 있는 측정치를 바탕으로 선형 역학계의 상태를 추정하는 재귀 필터로, 루돌프 칼만이 개발하였다. 칼만 필터는 컴퓨터 비전, 로봇 공학, 레이다 등의 여러 분야에 사용된다. 칼만 필터는 과거에 수행한 측정값을 바탕으로 현재의 상태 변수의 결합분포를 추정한다.
+
+> P*예상값 = P*추정값 - 상수*상수*P*추정값 = (1-상수)\*P*추정값
+
+```python
+cv2.KalmanFilter(int dynamParams, int measureParams, int controlParams=0, int type=CV_32F)
+```
+
+<strong>Example</strong>
+
+```python
+import cv2
+import numpy as np
+
+class KalmanFilter:
+    kf = cv2.KalmanFilter(4, 2)
+    kf.measurementMatrix = np.array([[1, 0, 0, 0], [0, 1, 0, 0]], np.float32)
+    kf.transitionMatrix = np.array([[1, 0, 1, 0], [0, 1, 0, 1], [0, 0, 1, 0], [0, 0, 0, 1]], np.float32)
+
+
+    def predict(self, coordX, coordY):
+        measured = np.array([[np.float32(coordX)], [np.float32(coordY)]])
+        self.kf.correct(measured)
+        predicted = self.kf.predict()
+        x, y = int(predicted[0]), int(predicted[1])
+        return x, y
+```
+
 ### Live Streaming
 
 ![image](https://github.com/yoonhero/OurAICar/blob/master/docs/liveStreaming.jpg?raw=true)
@@ -139,7 +169,7 @@ Callable Object 라는 녀석을 통해 Web Server 가 요청에 대한 정보�
         -   [x] Simple Yolov2 Object Detection
         -   [x] GPIO Motor Control
 
-<strong>Beta ver 2.0</strong>
+<strong>[Beta ver 2.0](https://www.youtube.com/watch?v=CvH4EfcbqXI)</strong>
 
 I'm planning to make LEVEL 3 AI.
 
@@ -151,7 +181,7 @@ I'm planning to make LEVEL 3 AI.
 -   [x] Steering CNN AI
 -   [ ] SLAM
 -   [ ] Image Processing Optimization
--   [ ] Test with Simulation
+-   [x] Test with Simulation
 -   [ ] Publishing
 
 <strong>Beta ver 3.0</strong>
