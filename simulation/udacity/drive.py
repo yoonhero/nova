@@ -7,12 +7,33 @@ import base64
 from io import BytesIO
 from PIL import Image
 import cv2
+import logging
+import time
+import os
 
 sio = socketio.Server()
 
 app = Flask(__name__) #'__main__'
-speed_limit = 40
+speed_limit = 12
 model = None
+
+logger = logging.getLogger(__name__)
+
+formatter = logging.Formatter('[%(asctime)s] [%(levelname)s | %(filename)s : %(lineno)s] >> %(message)s')
+
+
+fileHandler = logging.FileHandler(filename="./server.log")
+
+fileHandler.setFormatter(formatter)
+
+logger.addHandler(fileHandler)
+
+logger.setLevel(level=logging.DEBUG)
+
+logger.debug("### Self Driving AI Car SoftWare Started!! ###")
+
+def current_milli_time():
+    return round(time.time()*1000)
 
 def img_preprocess(img):
     img = img[60:135,:,:]
@@ -28,24 +49,31 @@ def img_preprocess(img):
 
 @sio.on('telemetry')
 def telemetry(sid, data):
-    speed = float(data['speed'])
-    image = Image.open(BytesIO(base64.b64decode(data['image'])))
+    try:
+        speed = float(data['speed'])
+        image = Image.open(BytesIO(base64.b64decode(data['image'])))
 
-    # image.save('python.jpg')
-    
-    image = np.asarray(image)
-    image = img_preprocess(image)
-    image = np.array([image])
-    steering_angle = float(model.predict(image))
-    throttle = 1.0 - speed/speed_limit
-    print('{} {} {}'.format(steering_angle, throttle, speed))
-    send_control(steering_angle, throttle)
-
+        filename = str(current_milli_time()) + ".jpeg"
+        image.save(os.path.join("logs", filename))
+        
+        image = np.asarray(image)
+        image = img_preprocess(image)
+        image = np.array([image])
+        steering_angle = float(model.predict(image))
+        throttle = 1.0 - speed/speed_limit
+        print('{} {} {}'.format(steering_angle, throttle, speed))
+        send_control(steering_angle, throttle)
+        
+        logger.info(f'Driving Data: {round(steering_angle*100)/100} {filename}')
+    except:
+        logger.warning("Error Occured on receiving data")
 
 
 @sio.on('connect')
 def connect(sid, environ):
     print('Connected')
+    logger.debug('Connected to the Socket.')
+    
     send_control(0, 0)
 
 def send_control(steering_angle, throttle):
