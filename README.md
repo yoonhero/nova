@@ -71,7 +71,7 @@ I am using RPi.GPIO to manipulate microservice in Raspberry PI. I make a motor c
 
 Using Yolov5, object detection speed is absolutely fast. And this is really real time. It was trained with around 20000 pictures with labelling Car, Pedestrian, Truck, Traffic Light.
 
-![image](https://github.com/yoonhero/OurAICar/blob/master/docs/objectdetect.PNG?raw=true)
+![image](https://github.com/yoonhero/nova/blob/master/docs/objectdetection.PNG?raw=true)
 
 ### Line Detection
 
