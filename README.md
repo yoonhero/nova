@@ -77,6 +77,15 @@ Using Yolov5, object detection speed is absolutely fast. And this is really real
 
 ![image](https://github.com/yoonhero/OurAICar/blob/master/docs/line_detection.png?raw=true)
 
+<strong>Camera Calibration 카메라 교정</strong>
+
+우리가 실제 눈으로 보는 세상은 3차원이지만 이것을 카메라로 찍으면 2차원의 이미지로 변하게 된다. 이때 3차원의 점들이 이미지 상에서 어디에 맺히는지는 기하학적으로 생각하면 영상을 찍을 당시의 카메라의 위치 및 방향에 의해 결정된다. 하지만 실제 이미지는 사용된 렌즈, 렌즈와 이미지 센서와의 거리, 렌즈와 이미지 센서가 이루는 각 등 카메라 내부의 기구적인 부분에 의해서 크게 영향을 받는다. 따라서 3차원 점들이 영상에 투영된 위치를 구하거나 역으로 영상 좌표로부터 3차원 공간좌표를 복원할때에는 이러한 내부 요인을 제거해야만 정확한 계산이 가능해진다. 그리고 이러한 내부 요인의 파라미터 값을 구하는 과정을 카메라 캘리브레이션이라고 부른다.
+
+![calibration](https://github.com/yoonhero/nova/blob/master/docs/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202021-11-28%2010.57.53.png?raw=true)
+
+
+
+
 Youtube 및 여러 사이트를 참고해서 OpenCV 로 도로의 선을 추출하는 모듈을 만들었습니다.
 
 <strong>예상 완성 모습!!</strong>
