@@ -5,7 +5,10 @@
 
 # Instroduction
 
-[Beta Version 1.0 Demo](https://www.youtube.com/watch?v=kk2jRKFPXv0)
+[Beta Ver 1.0 Demo](https://www.youtube.com/watch?v=kk2jRKFPXv0)
+
+[Beta ver 2.0 Udacity Simulation](https://www.youtube.com/watch?v=CvH4EfcbqXI)
+
 
 이 프로젝트를 완성하는 것이 세상을 바꾸기 위한 작은 발걸음이 될 것이라고 생각하고 열심히 노력하고 있습니다.
 
